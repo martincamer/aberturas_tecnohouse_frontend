@@ -1,0 +1,22 @@
+{
+  "theme_color": "#000",
+  "background_color": "#FFFF",
+  "icons": [
+    {
+      "src": "https://www.viviendastecnohouse.com.ar/storage/img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://www.viviendastecnohouse.com.ar/storage/img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "any",
+  "display": "fullscreen",
+  "dir": "auto",
+  "lang": "es-AR",
+  "name": "TECNOHOUSE LOGISTICA",
+  "short_name": "TECNOHOUSE LOGISTICA"
+}

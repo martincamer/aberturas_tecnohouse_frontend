@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #ffff;
+  /* background-color: #ecf0f1a5; */
+  &::-webkit-scrollbar {
+    width: 10px; /* Ancho de la barra de desplazamiento */
+    border-radius: 2px; /* Bordes redondeados */
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color del riel */
+    border-radius: 10px; /* Bordes redondeados para el riel */
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(
+      190,
+      190,
+      190,
+      0.6
+    ); /* Color de la barra de desplazamiento */
+    border-radius: 2px; /* Bordes redondeados para el pulgar */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(79, 79, 79); /* Color al pasar el mouse por encima */
+  }
+}
+
+.scroll-bar {
+  &::-webkit-scrollbar {
+    width: 10px; /* Ancho de la barra de desplazamiento */
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color del riel */
+    border-radius: 12px; /* Bordes redondeados para el riel */
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(
+      190,
+      190,
+      190,
+      0.6
+    ); /* Color de la barra de desplazamiento */
+    border-radius: 2px; /* Bordes redondeados para el pulgar */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(79, 79, 79); /* Color al pasar el mouse por encima */
+  }
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  width: 0;
+  height: 0; /* Opcional: para ocultar scrollbar horizontal */
+}
+
+/* Clase para ocultar scrollbar en Firefox */
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
