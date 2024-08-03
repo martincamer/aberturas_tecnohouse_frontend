@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { Aberturas } from "./routes/pages/protected/Aberturas.jsx";
 import { Salidas } from "./routes/pages/protected/Salidas.jsx";
 import { Cierres } from "./routes/pages/protected/Cierres.jsx";
+import { Contratos } from "./routes/pages/protected/Contratos.jsx";
 
 function App() {
   const { isAuth, user } = useAuth();
@@ -66,6 +67,7 @@ function App() {
               <Route path="/aberturas" element={<Aberturas />} />
               <Route path="/salidas" element={<Salidas />} />
               <Route path="/cierres" element={<Cierres />} />
+              <Route path="/contratos" element={<Contratos />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />

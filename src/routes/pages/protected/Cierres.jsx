@@ -3,9 +3,13 @@ import { useForm } from "react-hook-form";
 import client from "../../../api/axios";
 import io from "socket.io-client";
 import { useEffect, useState } from "react";
-import { showSuccessToast } from "../../../helpers/toast";
+import {
+  showSuccessToast,
+  showSuccessToastError,
+} from "../../../helpers/toast";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { formatearFecha } from "../../../helpers/formatearFecha";
+import { useObtenerId } from "../../../helpers/obtenerId";
 
 export const Cierres = () => {
   const { cierres } = useAberturasContext();
@@ -42,7 +46,7 @@ export const Cierres = () => {
     return true; // Mostrar todos si no hay filtros aplicados
   };
 
-  console.log(cierres);
+  const { handleObtenerId, idObtenida } = useObtenerId();
   return (
     <section className="w-full h-full min-h-screen max-h-full">
       <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
@@ -137,7 +141,10 @@ export const Cierres = () => {
                   <div className="flex gap-3">
                     <FaDeleteLeft
                       onClick={() => {
-                        // Aquí va la lógica para eliminar el cierre si es necesario
+                        handleObtenerId(cierre.id),
+                          document
+                            .getElementById("my_modal_eliminar")
+                            .showModal();
                       }}
                       className="text-xl text-red-500 cursor-pointer"
                     />
@@ -149,6 +156,7 @@ export const Cierres = () => {
         </table>
       </div>
       <ModalCrearCierre />
+      <ModalEliminar idObtenida={idObtenida} />
     </section>
   );
 };
@@ -230,6 +238,79 @@ export const ModalCrearCierre = () => {
               className="py-1.5 px-6 bg-primary hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
             >
               Cargar el numero del cierre
+            </button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+  );
+};
+
+const ModalEliminar = ({ idObtenida }) => {
+  const { handleSubmit } = useForm();
+
+  const { setCierres } = useAberturasContext();
+
+  const onSubmit = async (formData) => {
+    try {
+      const ordenData = {
+        datos: {
+          ...formData,
+        },
+      };
+
+      const res = await client.delete(`/cierres/${idObtenida}`, ordenData);
+
+      setCierres(res.data);
+
+      document.getElementById("my_modal_eliminar").close();
+
+      showSuccessToastError("Eliminado correctamente");
+    } catch (error) {
+      console.error("Error creating product:", error);
+    }
+  };
+
+  return (
+    <dialog id="my_modal_eliminar" className="modal">
+      <div className="modal-box rounded-md max-w-md">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <img
+              className="w-44 mx-auto"
+              src="https://app.holded.com/assets/img/document/doc_delete.png"
+            />
+          </div>
+          <div className="font-semibold text-sm text-gray-400 text-center">
+            REFERENCIA {idObtenida}
+          </div>
+          <div className="font-semibold text-[#FD454D] text-lg text-center">
+            Eliminar el cierre cargado..
+          </div>
+          <div className="text-sm text-gray-400 text-center mt-1">
+            El documento no podra ser recuperado nunca mas...
+          </div>
+          <div className="mt-4 text-center w-full px-16">
+            <button
+              type="submit"
+              className="bg-red-500 py-1 px-4 text-center font-bold text-white text-sm rounded-md w-full"
+            >
+              Confirmar
+            </button>{" "}
+            <button
+              type="button"
+              onClick={() =>
+                document.getElementById("my_modal_eliminar").close()
+              }
+              className="bg-orange-100 py-1 px-4 text-center font-bold text-orange-600 mt-2 text-sm rounded-md w-full"
+            >
+              Cancelar
             </button>
           </div>
         </form>

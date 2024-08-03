@@ -136,7 +136,7 @@ export const Salidas = () => {
   };
 
   // Calcular y mostrar el total
-  const totalCantidad = calcularTotalCantidad(salidas);
+  const totalCantidad = calcularTotalCantidad(filteredData);
 
   function renderRemitos(remitosString) {
     if (!remitosString || remitosString === "") {
@@ -160,6 +160,11 @@ export const Salidas = () => {
       return <p>Error parsing remitos JSON</p>;
     }
   }
+
+  const totalContratos = filteredData?.reduce((total, item) => {
+    const contratos = JSON.parse(item?.contratos); // Convierte el texto JSON a un objeto
+    return total + contratos?.length; // Suma la cantidad de contratos
+  }, 0);
 
   return (
     <section className="w-full h-full min-h-screen max-h-full">
@@ -190,7 +195,9 @@ export const Salidas = () => {
         >
           <div className="grid grid-cols-2 text-base py-3 px-3 gap-2 max-md:grid-cols-1">
             <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
-              <p className="font-medium text-gray-800">Total en salidas</p>
+              <p className="font-medium text-gray-800">
+                Total aberturas entregadas
+              </p>
               <p className="font-bold text-gray-800">{totalCantidad}</p>
             </div>{" "}
             <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
@@ -198,6 +205,10 @@ export const Salidas = () => {
                 Aberturas en stock sistema
               </p>
               <p className="font-bold text-gray-800">{totalStock}</p>
+            </div>
+            <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
+              <p className="font-medium text-gray-800">Contratos de salidas</p>
+              <p className="font-bold text-blue-500">{totalContratos}</p>
             </div>
           </div>
         </ul>

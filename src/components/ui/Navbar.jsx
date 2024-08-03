@@ -37,6 +37,12 @@ export const Navbar = () => {
             to={"/aberturas"}
           >
             Sector aberturas
+          </Link>{" "}
+          <Link
+            className="text-white font-semibold hover:bg-gray-700 py-1 px-4 rounded-md transition-all"
+            to={"/contratos"}
+          >
+            Sector contratos
           </Link>
         </div>
       </div>
