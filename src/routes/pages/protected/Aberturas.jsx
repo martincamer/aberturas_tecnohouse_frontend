@@ -35,9 +35,27 @@ export const Aberturas = () => {
     return matchesSearchTerm && matchesColor && matchesLinea && matchesTipo;
   });
 
-  filteredData.sort((a, b) => b.stock - a.stock);
+  filteredData.sort((a, b) => {
+    const stockA = parseInt(a.stock);
+    const stockB = parseInt(b.stock);
+
+    // Si ambos tienen stock negativo o ambos tienen stock positivo, ordenar por stock de forma descendente
+    if ((stockA < 0 && stockB < 0) || (stockA >= 0 && stockB >= 0)) {
+      return stockB - stockA; // Orden descendente
+    } else if (stockA < 0) {
+      return -1; // A tiene stock negativo, debe ir primero
+    } else {
+      return 1; // B tiene stock negativo, debe ir primero
+    }
+  });
 
   const { handleObtenerId, idObtenida } = useObtenerId();
+
+  const stockTotal = filteredData.reduce((total, abertura) => {
+    const stock = parseInt(abertura.stock); // Convertir stock a número entero
+
+    return total + stock;
+  }, 0);
 
   return (
     <section className="w-full h-full min-h-screen max-h-full">
@@ -52,6 +70,17 @@ export const Aberturas = () => {
         >
           Cargar nueva abertura
         </button>
+      </div>
+
+      <div className="px-10 pt-10">
+        <div>
+          <p className="font-bold flex items-center gap-3">
+            Numero del stock en fabrica/sistema{" "}
+            <span className="font-extrabold bg-green-100/90 py-1 px-4 rounded-md text-green-700">
+              {stockTotal}
+            </span>
+          </p>
+        </div>
       </div>
 
       <div className="py-10 px-10 max-md:px-5">
@@ -486,6 +515,9 @@ export const ModalActualizarAbertura = ({ idObtenida }) => {
             >
               <option className="font-bold text-primary">
                 Seleccionar el tipo
+              </option>{" "}
+              <option value={"ventana corrediza"} className="font-semibold">
+                Mosquitero
               </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza

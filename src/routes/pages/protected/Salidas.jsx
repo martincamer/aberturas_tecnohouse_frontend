@@ -15,6 +15,8 @@ import {
 import { ModalActualizarAbertura, ModalCrearNuevaAbertura } from "./Aberturas";
 import { formatearFecha } from "../../../helpers/formatearFecha";
 import axios from "axios";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { ImprimirTodosLasSalidas } from "../../../components/pdf/ImprimirTodosLasSalidas";
 
 export const Salidas = () => {
   const { salidas, fabricas, aberturas } = useAberturasContext();
@@ -166,6 +168,8 @@ export const Salidas = () => {
     return total + contratos?.length; // Suma la cantidad de contratos
   }, 0);
 
+  console.log("data filtrada", filteredData);
+
   return (
     <section className="w-full h-full min-h-screen max-h-full">
       <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
@@ -271,6 +275,17 @@ export const Salidas = () => {
               ))}
             </select>
           </div>
+        </div>
+        <div className="mt-3">
+          <PDFDownloadLink
+            className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
+            fileName={`Resumen filtrado desde ${fechaInicio} - ${fechaFin}`}
+            document={
+              <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
+            }
+          >
+            Descargar resumen..
+          </PDFDownloadLink>
         </div>
       </div>
 
@@ -400,6 +415,12 @@ export const Salidas = () => {
           </tbody>
         </table>
       </div>
+      {/* 
+      <div>
+        <PDFViewer className="w-full h-[100vh]">
+          <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
+        </PDFViewer>
+      </div> */}
 
       <ModalCrearNuevaSalida />
       <ModalEliminar idObtenida={idObtenida} />
@@ -1622,6 +1643,9 @@ export const ModalCargarAberturasAlSistema = ({}) => {
               <option value={"mosquiteros"} className="font-semibold">
                 Mosquiteros
               </option>
+              <option value={"mosquiteros"} className="font-semibold">
+                Mosquiteros
+              </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza
               </option>
@@ -1874,6 +1898,9 @@ export const ModalSeleccionarAberturas = ({ handleSeleccionarAbertura }) => {
               <option className="font-bold capitalize text-primary" value="">
                 Seleccionar el tipo...
               </option>
+              <option value={"mosquiteros"} className="font-semibold">
+                Mosquiteros
+              </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza
               </option>
@@ -2077,12 +2104,6 @@ export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
                     .getElementById("my_modal_seleccionar_aberturas")
                     .close();
               }}
-              // onClick={() => {
-              //   {
-              //     handleObtenerId(abertura.id),
-              //       document.getElementById("my_modal_cantidad").close();
-              //   }
-              // }}
               type="button"
               className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
             >
@@ -2421,7 +2442,6 @@ export const ModalNuevaFabrica = () => {
 };
 
 const ModalVerImagenesRemitos = ({ idObtenida }) => {
-  const [datos, setDatos] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [remitos, setRemitos] = useState([]);
 
@@ -2434,11 +2454,10 @@ const ModalVerImagenesRemitos = ({ idObtenida }) => {
 
         // Obtener imágenes
         const parsedUrls = JSON.parse(data.files);
-        setImageUrls(parsedUrls);
+        setImageUrls(parsedUrls); // Verify if this is an array
 
-        // Obtener remitos
         const parsedRemitos = JSON.parse(data.remitos);
-        setRemitos(parsedRemitos);
+        setRemitos(parsedRemitos); // Verify if this is an array
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -2459,28 +2478,30 @@ const ModalVerImagenesRemitos = ({ idObtenida }) => {
         <h3 className="font-bold text-lg">Imágenes de remitos y numero.</h3>
         {/* Renderizar remitos */}
         <div className="flex flex-col gap-2 mt-4">
-          {remitos.map((remito, index) => (
-            <div key={index} className="remito-item">
-              <p className="font-bold text-sm">
-                Número de remito:{" "}
-                <span className="text-blue-500 font-extrabold">
-                  {remito.numero}
-                </span>
-              </p>
-            </div>
-          ))}
+          {remitos &&
+            remitos?.map((remito, index) => (
+              <div key={index} className="remito-item">
+                <p className="font-bold text-sm">
+                  Número de remito:{" "}
+                  <span className="text-blue-500 font-extrabold">
+                    {remito.numero}
+                  </span>
+                </p>
+              </div>
+            ))}
         </div>
         {/* Renderizar imágenes */}
         <div className="flex flex-col gap-2 mt-4">
-          {imageUrls.map((url, index) => (
-            <div key={index} className="file-preview">
-              <img
-                src={url}
-                alt={`Imagen ${index}`}
-                className="preview-image w-full h-auto object-cover"
-              />
-            </div>
-          ))}
+          {imageUrls &&
+            imageUrls?.map((url, index) => (
+              <div key={index} className="file-preview">
+                <img
+                  src={url}
+                  alt={`Imagen ${index}`}
+                  className="preview-image w-full h-auto object-cover"
+                />
+              </div>
+            ))}
         </div>
       </div>
     </dialog>
