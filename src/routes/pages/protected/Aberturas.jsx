@@ -77,7 +77,7 @@ export const Aberturas = () => {
                 Seleccionar el tipo...
               </option>
               <option value={"mosquiteros"} className="font-semibold">
-                Ventana corrediza
+                Mosquiteros
               </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza
