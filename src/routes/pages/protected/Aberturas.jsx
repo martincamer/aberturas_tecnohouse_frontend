@@ -76,6 +76,9 @@ export const Aberturas = () => {
               <option className="font-bold capitalize text-primary" value="">
                 Seleccionar el tipo...
               </option>
+              <option value={"mosquiteros"} className="font-semibold">
+                Ventana corrediza
+              </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza
               </option>
