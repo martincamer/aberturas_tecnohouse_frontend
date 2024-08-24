@@ -607,7 +607,18 @@ const SeleccionarAbertura = ({ addToAberturas }) => {
             ✕
           </button>
         </form>
-        <h3 className="font-bold text-lg">Seleccionar la abertura</h3>
+        <h3 className="font-bold text-lg mb-2">Seleccionar la abertura</h3>
+        <div className="mb-3">
+          <button
+            onClick={() => {
+              document.getElementById("my_modal_nueva_abertura").showModal();
+            }}
+            type="button"
+            className="bg-blue-500 py-2 px-4 rounded-md text-white font-bold text-sm"
+          >
+            Cargar abertura a mano
+          </button>
+        </div>
         <div className="flex gap-2 mb-4 max-md:flex-col max-md:w-auto max-md:py-5">
           <div className="border border-gray-300 flex items-center gap-2 w-1/3 px-2 max-md:w-auto py-1.5 text-sm rounded-md">
             <input
@@ -744,6 +755,175 @@ const SeleccionarAbertura = ({ addToAberturas }) => {
           idObtenida={idObtenida}
           addToAberturas={addToAberturas}
         />
+        <ModalNuevaAbertura addToAberturas={addToAberturas} />
+      </div>
+    </dialog>
+  );
+};
+
+const ModalNuevaAbertura = ({ addToAberturas }) => {
+  const generateRandomId = () => Math.floor(Math.random() * 1000000);
+  const idRandom = generateRandomId(); // Genera un ID aleatorio
+
+  const [detalle, setDetalle] = useState("");
+  const [medida, setMedida] = useState("");
+  const [color, setColor] = useState("");
+  const [linea, setLinea] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [cantidades, setCantidades] = useState("");
+
+  return (
+    <dialog id="my_modal_nueva_abertura" className="modal">
+      <div className="modal-box rounded-md">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg">Generar la nueva abertura.</h3>
+        <form className="mt-4 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
+            <label className="font-bold text-sm">Detalle de la abertura</label>
+            <input
+              value={detalle}
+              onChange={(e) => setDetalle(e.target.value)}
+              type="text"
+              placeholder="Escribe del detalle.."
+              className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="font-bold text-sm">AnchoxAlto</label>
+            <input
+              value={medida}
+              onChange={(e) => setMedida(e.target.value)}
+              type="text"
+              placeholder="ej:120x120"
+              className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="font-bold text-sm">Tipo de abertura</label>
+            <select
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+              type="text"
+              className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
+            >
+              <option className="font-bold text-primary">
+                Seleccionar el tipo
+              </option>
+              <option value={"mosquiteros"} className="font-semibold">
+                Mosquiteros
+              </option>
+              <option value={"ventana corrediza"} className="font-semibold">
+                Ventana corrediza
+              </option>
+              <option value={"raja de abrir"} className="font-semibold">
+                Raja de abrir
+              </option>
+              <option value={"porton de abrir"} className="font-semibold">
+                Porton de abrir
+              </option>
+              <option value={"puerta de abrir"} className="font-semibold">
+                Puerta de abrir
+              </option>
+              <option value={"celosia de abrir"} className="font-semibold">
+                Celosia de abrir
+              </option>
+              <option value={"celosia corrediza"} className="font-semibold">
+                Celosia corrediza
+              </option>
+              <option value={"paño fijo"} className="font-semibold">
+                Paño fijo
+              </option>{" "}
+              <option value={"acople"} className="font-semibold">
+                Acople
+              </option>
+            </select>
+          </div>{" "}
+          <div className="flex flex-col gap-2">
+            <label className="font-bold text-sm">Linea de la abertura</label>
+            <select
+              value={linea}
+              onChange={(e) => setLinea(e.target.value)}
+              type="text"
+              className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
+            >
+              <option className="font-bold text-primary">
+                Seleccionar la linea
+              </option>
+              <option value={"herrero"} className="font-semibold">
+                Herrero
+              </option>
+              <option value={"modena"} className="font-semibold">
+                Modena
+              </option>{" "}
+              <option value={"modena a30"} className="font-semibold">
+                Modena a30
+              </option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="font-bold text-sm">Color de la abertura</label>
+            <select
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              type="text"
+              className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
+            >
+              <option className="font-bold text-primary">
+                Seleccionar el color
+              </option>
+              <option value={"blanco"} className="font-semibold">
+                Blanco
+              </option>
+              <option value={"negro"} className="font-semibold">
+                Negro
+              </option>{" "}
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="font-bold text-sm">Cantidad</label>
+            <input
+              value={cantidades}
+              onChange={(e) => setCantidades(e.target.value)}
+              type="text"
+              placeholder="Escribe la cantidad.."
+              className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
+            />
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                addToAberturas(
+                  idRandom,
+                  detalle,
+                  medida,
+                  color,
+                  linea,
+                  tipo,
+                  cantidades
+                ),
+                  document.getElementById("my_modal_nueva_abertura").close(),
+                  document
+                    .getElementById("my_modal_seleccionar_abertura")
+                    .close(),
+                  setCantidades(0),
+                  setColor(""),
+                  setDetalle(""),
+                  setLinea(""),
+                  setMedida(""),
+                  setTipo("");
+              }}
+              className="py-1.5 px-6 bg-primary hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
+            >
+              Cargar la abertura/inexistente
+            </button>
+          </div>
+        </form>
       </div>
     </dialog>
   );
