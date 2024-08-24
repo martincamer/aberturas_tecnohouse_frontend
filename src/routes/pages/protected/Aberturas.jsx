@@ -330,6 +330,9 @@ export const ModalCrearNuevaAbertura = () => {
               <option className="font-bold text-primary">
                 Seleccionar el tipo
               </option>
+              <option value={"mosquiteros"} className="font-semibold">
+                Mosquiteros
+              </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza
               </option>
@@ -516,8 +519,8 @@ export const ModalActualizarAbertura = ({ idObtenida }) => {
               <option className="font-bold text-primary">
                 Seleccionar el tipo
               </option>{" "}
-              <option value={"ventana corrediza"} className="font-semibold">
-                Mosquitero
+              <option value={"mosquiteros"} className="font-semibold">
+                Mosquiteros
               </option>
               <option value={"ventana corrediza"} className="font-semibold">
                 Ventana corrediza
