@@ -16,6 +16,8 @@ import { Aberturas } from "./routes/pages/protected/Aberturas.jsx";
 import { Salidas } from "./routes/pages/protected/Salidas.jsx";
 import { Cierres } from "./routes/pages/protected/Cierres.jsx";
 import { Contratos } from "./routes/pages/protected/Contratos.jsx";
+import { GenerarPedido } from "./routes/pages/protected/GenerarPedido.jsx";
+import { PedidosFabricas } from "./routes/pages/protected/PedidosFabricas.jsx";
 
 function App() {
   const { isAuth, user } = useAuth();
@@ -68,6 +70,8 @@ function App() {
               <Route path="/salidas" element={<Salidas />} />
               <Route path="/cierres" element={<Cierres />} />
               <Route path="/contratos" element={<Contratos />} />
+              <Route path="/pedido-nuevo" element={<GenerarPedido />} />
+              <Route path="/pedidos-fabricas" element={<PedidosFabricas />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />

@@ -52,8 +52,15 @@ export const Register = () => {
             placeholder={"@emailregistro@email.com"}
             type={"email"}
           />
+        </div>{" "}
+        <div className="flex flex-col gap-2">
+          <Label label="Fabrica" />
+          <Input
+            register={register}
+            placeholder={"Fabrica del usuario"}
+            type={"fabrica"}
+          />
         </div>
-
         <div className="flex flex-col gap-2">
           <Label label="Usuario" />
           <Input
@@ -62,12 +69,10 @@ export const Register = () => {
             type={"username"}
           />
         </div>
-
         <div className="flex flex-col gap-2">
           <Label label="Contraseña" />
           <InputPassword register={register} type={"password"} />
         </div>
-
         <Button type={"submit"} titulo={"Registrar Usuario"} />
       </form>
     </section>
