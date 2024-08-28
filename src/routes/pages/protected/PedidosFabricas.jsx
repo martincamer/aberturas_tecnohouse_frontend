@@ -241,6 +241,7 @@ export const PedidosFabricas = () => {
 
 const ModalPedidoCompleto = ({ idObtenida }) => {
   const [pedido, setPedido] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -253,8 +254,19 @@ const ModalPedidoCompleto = ({ idObtenida }) => {
 
   const aberturas = pedido?.aberturas ? JSON.parse(pedido.aberturas) : [];
 
+  // Filtrado de datos
+  let filteredData = aberturas.filter((item) => {
+    // Buscar en detalle y ancho_alto
+    const searchTermLower = searchTerm.toLowerCase();
+    const matchesSearchTerm = item.cliente
+      .toLowerCase()
+      .includes(searchTermLower);
+
+    return matchesSearchTerm;
+  });
+
   // Agrupar y sumar cantidades
-  const groupedAberturas = aberturas.reduce((acc, cliente) => {
+  const groupedAberturas = filteredData.reduce((acc, cliente) => {
     cliente.aberturas.forEach((abertura) => {
       // Crear una clave única para agrupar
       const key = `${abertura.tipo}-${abertura.detalle}-${abertura.medida}-${abertura.color}-${abertura.categoria}`;
@@ -309,8 +321,21 @@ const ModalPedidoCompleto = ({ idObtenida }) => {
           <span className="font-bold">{formatearFecha(pedido.created_at)}</span>
         </div>
 
+        <div className="my-3">
+          <div className="border border-gray-300  max-md:w-auto  flex items-center gap-2 w-1/3 px-2 py-1.5 text-sm rounded-md">
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              type="text"
+              className="outline-none font-medium w-full"
+              placeholder="Buscar por cliente...."
+            />
+            <FaSearch className="text-gray-700" />
+          </div>
+        </div>
+
         <div className="mt-4">
-          {aberturas.map((cliente, index) => (
+          {filteredData.map((cliente, index) => (
             <div key={index} className="mb-4">
               <h4 className="font-bold text-md mb-2">
                 Cliente/Contrato{" "}
