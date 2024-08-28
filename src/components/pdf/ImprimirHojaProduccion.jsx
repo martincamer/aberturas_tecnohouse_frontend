@@ -3,7 +3,6 @@ import {
   Text,
   View,
   Page,
-  Image,
   Font,
   StyleSheet,
 } from "@react-pdf/renderer";
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
 
 export const ImprimirHojaProduccion = ({ pedido }) => {
   const aberturas = pedido?.aberturas ? JSON.parse(pedido.aberturas) : [];
-  console.log(aberturas);
 
   // Función para agrupar aberturas por tipo y atributos
   const agruparPorTipoYAtributos = (aberturas) => {
@@ -117,6 +115,11 @@ export const ImprimirHojaProduccion = ({ pedido }) => {
   };
 
   const aberturasAgrupadas = agruparPorTipoYAtributos(aberturas);
+
+  // Función para calcular el total de cantidad por tipo
+  const calcularTotalPorTipo = (aberturas) => {
+    return aberturas.reduce((total, abertura) => total + abertura.cantidad, 0);
+  };
 
   return (
     <Document>
@@ -186,72 +189,97 @@ export const ImprimirHojaProduccion = ({ pedido }) => {
               marginTop: 10,
             }}
           >
-            {Object.keys(aberturasAgrupadas).map((tipo, index) => (
-              <View key={index} style={{ marginBottom: 10 }}>
-                <Text
-                  style={{
-                    fontFamily: "Montserrat",
-                    fontWeight: "bold",
-                    marginBottom: 5,
-                    fontSize: 12,
-                  }}
-                >
-                  {tipo.toUpperCase()}
-                </Text>
+            {Object.keys(aberturasAgrupadas).map((tipo, index) => {
+              const totalPorTipo = calcularTotalPorTipo(
+                aberturasAgrupadas[tipo]
+              );
 
-                <View style={styles.table}>
-                  {/* Encabezado de la tabla */}
-                  <View style={styles.tableRow}>
-                    <View style={[styles.tableColLarge, styles.header]}>
-                      <Text style={styles.tableCell}>Detalle</Text>
+              return (
+                <View key={index} style={{ marginBottom: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "Montserrat",
+                      fontWeight: "bold",
+                      marginBottom: 5,
+                      fontSize: 12,
+                    }}
+                  >
+                    {tipo.toUpperCase()}
+                  </Text>
+
+                  <View style={styles.table}>
+                    {/* Encabezado de la tabla */}
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableColLarge, styles.header]}>
+                        <Text style={styles.tableCell}>Detalle</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}>Medida</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}>Color</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}>Categoría</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}>Cantidad</Text>
+                      </View>
                     </View>
-                    <View style={[styles.tableCol, styles.header]}>
-                      <Text style={styles.tableCell}>Medida</Text>
-                    </View>
-                    <View style={[styles.tableCol, styles.header]}>
-                      <Text style={styles.tableCell}>Color</Text>
-                    </View>
-                    <View style={[styles.tableCol, styles.header]}>
-                      <Text style={styles.tableCell}>Categoría</Text>
-                    </View>
-                    <View style={[styles.tableCol, styles.header]}>
-                      <Text style={styles.tableCell}>Cantidad</Text>
+
+                    {/* Filas de la tabla */}
+                    {aberturasAgrupadas[tipo].map((abertura, index) => (
+                      <View key={index} style={styles.tableRow}>
+                        <View style={styles.tableColLarge}>
+                          <Text style={[styles.tableCell, styles.content]}>
+                            {abertura.detalle}
+                          </Text>
+                        </View>
+                        <View style={styles.tableCol}>
+                          <Text style={[styles.tableCell, styles.content]}>
+                            {abertura.medida}
+                          </Text>
+                        </View>
+                        <View style={styles.tableCol}>
+                          <Text style={[styles.tableCell, styles.content]}>
+                            {abertura.color}
+                          </Text>
+                        </View>
+                        <View style={styles.tableCol}>
+                          <Text style={[styles.tableCell, styles.content]}>
+                            {abertura.categoria}
+                          </Text>
+                        </View>
+                        <View style={styles.tableCol}>
+                          <Text style={[styles.tableCell, styles.content]}>
+                            {abertura.cantidad}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+
+                    {/* Total por tipo */}
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableColLarge, styles.header]}>
+                        <Text style={styles.tableCell}>Total {tipo}</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}></Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}></Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}></Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.header]}>
+                        <Text style={styles.tableCell}>{totalPorTipo}</Text>
+                      </View>
                     </View>
                   </View>
-
-                  {/* Filas de la tabla */}
-                  {aberturasAgrupadas[tipo].map((abertura, index) => (
-                    <View key={index} style={styles.tableRow}>
-                      <View style={styles.tableColLarge}>
-                        <Text style={[styles.tableCell, styles.content]}>
-                          {abertura.detalle}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={[styles.tableCell, styles.content]}>
-                          {abertura.medida}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={[styles.tableCell, styles.content]}>
-                          {abertura.color}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={[styles.tableCell, styles.content]}>
-                          {abertura.categoria}
-                        </Text>
-                      </View>
-                      <View style={styles.tableCol}>
-                        <Text style={[styles.tableCell, styles.content]}>
-                          {abertura.cantidad}
-                        </Text>
-                      </View>
-                    </View>
-                  ))}
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         </View>
       </Page>
