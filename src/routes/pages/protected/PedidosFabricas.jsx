@@ -422,7 +422,10 @@ const ModalEstado = ({ idObtenida, setPedidos }) => {
         ...formData,
       };
 
-      const res = await client.put(`/pedido/${idObtenida}`, aberturaData);
+      const res = await client.put(
+        `/pedido-estado/${idObtenida}`,
+        aberturaData
+      );
 
       setPedidos(res.data.pedidos);
 
