@@ -12,7 +12,7 @@ export const Home = () => {
   // Obtener el primer día del mes actual
   const today = new Date();
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 10);
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 10, 1);
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
   // Convertir las fechas en formato YYYY-MM-DD para los inputs tipo date
   const fechaInicioPorDefecto = firstDayOfMonth.toISOString().split("T")[0];
