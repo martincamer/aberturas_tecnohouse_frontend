@@ -420,11 +420,11 @@ export const Salidas = () => {
         </table>
       </div>
 
-      <div>
+      {/* <div>
         <PDFViewer className="w-full h-[100vh]">
           <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
         </PDFViewer>
-      </div>
+      </div> */}
 
       <ModalCrearNuevaSalida />
       <ModalEliminar idObtenida={idObtenida} />
