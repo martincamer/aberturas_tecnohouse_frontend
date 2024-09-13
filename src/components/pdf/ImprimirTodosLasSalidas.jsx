@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   fileImage: {
     maxWidth: "100%", // Ajustar la imagen al ancho máximo disponible
-    maxHeight: "100%", // Ajustar la imagen al alto máximo disponible
+    maxHeight: "50vh", // Ajustar la imagen al alto máximo disponible
   },
 });
 
@@ -213,7 +213,6 @@ export const ImprimirTodosLasSalidas = ({ todasLasSalidas }) => {
 
           {/* Files */}
           <View>
-            <Text style={styles.tableHeader}>Files</Text>
             {fabricasAgrupadas[fabrica].files.map((file, idx) => (
               <View style={styles.fileItem} key={idx}>
                 <Image src={file} style={styles.fileImage} />
