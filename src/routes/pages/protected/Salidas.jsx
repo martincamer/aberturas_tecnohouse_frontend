@@ -1517,6 +1517,11 @@ export const ModalSeleccionarAberturas = ({ handleSeleccionarAbertura }) => {
 export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
   const [abertura, setAbertura] = useState([]);
   const [cantidades, setCantidades] = useState(0);
+  const [detalle, setDetalle] = useState("");
+  const [linea, setLinea] = useState("");
+  const [color, setColor] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [medida, setMedida] = useState("");
 
   const generateRandomId = () => Math.floor(Math.random() * 1000000);
   const idRandom = generateRandomId(); // Genera un ID aleatorio
@@ -1527,13 +1532,18 @@ export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
 
       setAbertura(res.data);
       console.log("asdasd", res.data);
+      setDetalle(res.data.detalle);
+      setMedida(res.data.ancho_alto);
+      setColor(res.data.color);
+      setTipo(res.data.tipo);
+      setLinea(res.data.linea);
     };
     obtenerDatos();
   }, [idObtenida]);
 
   return (
     <dialog id="my_modal_cantidad" className="modal">
-      <div className="modal-box rounded-md max-md:h-full max-md:w-full max-md:max-w-full max-md:max-h-full max-md:rounded-none">
+      <div className="modal-box rounded-md max-w-3xl max-md:h-full max-md:w-full max-md:max-w-full max-md:max-h-full max-md:rounded-none">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -1545,27 +1555,126 @@ export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
             <p className="text-lg font-bold">
               Datos de la abertura seleccionada.
             </p>
-            <div className="font-bold text-sm text-blue-500">
-              Detalle :{" "}
-              <span className="text-gray-800 capitalize">
-                {abertura.detalle} - {abertura.ancho_alto}
-              </span>
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-1">
+              Detalle de la abertura
+              <input
+                className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                value={detalle}
+                onChange={(e) => setDetalle(e.target.value)}
+              />
+            </div>{" "}
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-1">
+              Ancho x Alto
+              <input
+                className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                value={medida}
+                onChange={(e) => setMedida(e.target.value)}
+              />
             </div>
-            <div className="font-bold text-sm text-blue-500">
-              Linea, color, tipo :{" "}
-              <span className="text-gray-800 capitalize">
-                {" "}
-                {abertura.linea}, {abertura.color}, {abertura.tipo}
-              </span>
+            <div className="font-bold text-sm text-blue-500  grid grid-cols-3 gap-2">
+              <div className="flex flex-col gap-1">
+                <p>Tipo</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el tipo...
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"ventana corrediza"} className="font-semibold">
+                    Ventana corrediza
+                  </option>
+                  <option value={"raja de abrir"} className="font-semibold">
+                    Raja de abrir
+                  </option>
+                  <option value={"porton de abrir"} className="font-semibold">
+                    Porton de abrir
+                  </option>
+                  <option value={"puerta de abrir"} className="font-semibold">
+                    Puerta de abrir
+                  </option>
+                  <option value={"celosia de abrir"} className="font-semibold">
+                    Celosia de abrir
+                  </option>
+                  <option value={"celosia corrediza"} className="font-semibold">
+                    Celosia corrediza
+                  </option>
+                  <option value={"paño fijo"} className="font-semibold">
+                    Paño fijo
+                  </option>
+                </select>
+              </div>{" "}
+              <div className="flex flex-col gap-1">
+                <p>Linea</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full capitalize"
+                  value={linea}
+                  onChange={(e) => setLinea(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar la linea...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="herrero">
+                    herrero
+                  </option>
+                  <option className="font-semibold capitalize" value="modena">
+                    modena
+                  </option>
+                  <option
+                    className="font-semibold capitalize"
+                    value="modena a30"
+                  >
+                    modena a30
+                  </option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <p>Color</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full capitalize"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el color...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="blanco">
+                    Blanco
+                  </option>
+                  <option className="font-semibold capitalize" value="negro">
+                    Negro
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-2">
+              Cantidad
+              <div>
+                <input
+                  className="border border-gray-300 rounded-md py-2 px-2 mb-3 font-bold text-sm outline-none text-black"
+                  onChange={(e) => setCantidades(e.target.value)}
+                  value={cantidades}
+                  type="text"
+                />
+              </div>
             </div>{" "}
           </div>
-
-          <input
-            className="border border-gray-300 rounded-md py-2 px-2 mb-3 font-bold text-sm outline-none"
-            onChange={(e) => setCantidades(e.target.value)}
-            value={cantidades}
-            type="text"
-          />
 
           <div className="flex">
             <button
@@ -1573,11 +1682,11 @@ export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
                 handleSeleccionarAbertura(
                   abertura.id,
                   abertura.id + idRandom,
-                  abertura.detalle,
+                  detalle,
                   abertura.color,
                   abertura.linea,
                   abertura.tipo,
-                  abertura.ancho_alto,
+                  medida,
                   cantidades
                 ),
                   setCantidades(0),
@@ -1597,192 +1706,6 @@ export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
     </dialog>
   );
 };
-
-// export const ModalActualizarAbertura = ({ idObtenida }) => {
-//   const { register, handleSubmit, setValue } = useForm();
-//   const { setAberturas } = useAberturasContext();
-
-//   const [socket, setSocket] = useState(null);
-
-//   useEffect(() => {
-//     const obtenerDatos = async () => {
-//       const respuesta = await client.get(`/abertura/${idObtenida}`);
-
-//       setValue("detalle", respuesta.data.detalle);
-//       setValue("color", respuesta.data.color);
-//       setValue("linea", respuesta.data.linea);
-//       setValue("tipo", respuesta.data.tipo);
-//       setValue("ancho_alto", respuesta.data.ancho_alto);
-//       setValue("stock", respuesta.data.stock);
-//     };
-
-//     obtenerDatos();
-//   }, [idObtenida]);
-
-//   useEffect(() => {
-//     const newSocket = io(import.meta.env.VITE_URL, {
-//       withCredentials: true,
-//     });
-
-//     setSocket(newSocket);
-
-//     newSocket.on("actualizar-abertura", (actualizarAbertura) => {
-//       setAberturas(actualizarAbertura);
-//     });
-
-//     return () => newSocket.close();
-//   }, []);
-
-//   const onSubmit = async (formData) => {
-//     try {
-//       const aberturaData = {
-//         ...formData,
-//       };
-
-//       const res = await client.put(`/aberturas/${idObtenida}`, aberturaData);
-
-//       if (socket) {
-//         socket.emit("actualizar-abertura", res?.data);
-//       }
-
-//       document.getElementById("my_modal_actualizar_abertura").close();
-//       showSuccessToast("Actualizado correctamente");
-
-//       // reset();
-//     } catch (error) {
-//       console.error("Error creating product:", error);
-//     }
-//   };
-
-//   return (
-//     <dialog id="my_modal_actualizar_abertura" className="modal">
-//       <div className="modal-box rounded-md">
-//         <form method="dialog">
-//           {/* if there is a button in form, it will close the modal */}
-//           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-//             ✕
-//           </button>
-//         </form>
-//         {/* <h3 className="font-bold text-lg">Cargar nueva abertura</h3>
-//         <p className="py-0 text-sm font-medium">
-//           Rellena los siguientes campos, para poder cargar una abertura.
-//         </p> */}
-//         <form
-//           className="py-4 flex flex-col gap-2"
-//           onSubmit={handleSubmit(onSubmit)}
-//         >
-//           <div className="flex flex-col gap-2">
-//             <label className="font-bold text-sm">Detalle de la abertura</label>
-//             <input
-//               {...register("detalle", { required: true })}
-//               type="text"
-//               placeholder="Escribe del detalle.."
-//               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
-//             />
-//           </div>
-//           <div className="flex flex-col gap-2">
-//             <label className="font-bold text-sm">AnchoxAlto</label>
-//             <input
-//               {...register("ancho_alto", { required: true })}
-//               type="text"
-//               placeholder="ej:120x120"
-//               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
-//             />
-//           </div>
-//           <div className="flex flex-col gap-2">
-//             <label className="font-bold text-sm">Tipo de abertura</label>
-//             <select
-//               {...register("tipo", { required: true })}
-//               type="text"
-//               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
-//             >
-//               <option className="font-bold text-primary">
-//                 Seleccionar el tipo
-//               </option>
-//               <option value={"ventana corrediza"} className="font-semibold">
-//                 Ventana corrediza
-//               </option>
-//               <option value={"raja de abrir"} className="font-semibold">
-//                 Raja de abrir
-//               </option>
-//               <option value={"porton de abrir"} className="font-semibold">
-//                 Porton de abrir
-//               </option>
-//               <option value={"puerta de abrir"} className="font-semibold">
-//                 Puerta de abrir
-//               </option>
-//               <option value={"celosia de abrir"} className="font-semibold">
-//                 Celosia de abrir
-//               </option>
-//               <option value={"celosia corrediza"} className="font-semibold">
-//                 Celosia corrediza
-//               </option>
-//               <option value={"paño fijo"} className="font-semibold">
-//                 Paño fijo
-//               </option>
-//             </select>
-//           </div>{" "}
-//           <div className="flex flex-col gap-2">
-//             <label className="font-bold text-sm">Linea de la abertura</label>
-//             <select
-//               {...register("linea", { required: true })}
-//               type="text"
-//               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
-//             >
-//               <option className="font-bold text-primary">
-//                 Seleccionar la linea
-//               </option>
-//               <option value={"herrero"} className="font-semibold">
-//                 Herrero
-//               </option>
-//               <option value={"modena"} className="font-semibold">
-//                 Modena
-//               </option>{" "}
-//               <option value={"modena a30"} className="font-semibold">
-//                 Modena a30
-//               </option>
-//             </select>
-//           </div>
-//           <div className="flex flex-col gap-2">
-//             <label className="font-bold text-sm">Color de la abertura</label>
-//             <select
-//               {...register("color", { required: true })}
-//               type="text"
-//               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
-//             >
-//               <option className="font-bold text-primary">
-//                 Seleccionar el color
-//               </option>
-//               <option value={"blanco"} className="font-semibold">
-//                 Blanco
-//               </option>
-//               <option value={"negro"} className="font-semibold">
-//                 Negro
-//               </option>{" "}
-//             </select>
-//           </div>
-//           <div className="flex flex-col gap-2">
-//             <label className="font-bold text-sm">Stock actual</label>
-//             <input
-//               {...register("stock", { required: true })}
-//               type="text"
-//               placeholder="Escribe el stock.."
-//               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
-//             />
-//           </div>
-//           <div>
-//             <button
-//               type="submit"
-//               className="py-1.5 px-6 bg-primary hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
-//             >
-//               Actualizar la abertura
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     </dialog>
-//   );
-// };
 
 const ModalEliminar = ({ idObtenida }) => {
   const { handleSubmit } = useForm();
