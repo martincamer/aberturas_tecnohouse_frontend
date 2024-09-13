@@ -139,12 +139,12 @@ export const ImprimirTodosLasSalidas = ({ todasLasSalidas }) => {
             <Image src={logo} />
           </View>
           <View style={styles.fabrica}>
-            <Text style={styles.fabricaName}>{fabrica}</Text>
+            <Text style={styles.fabricaName}>Fabrica {fabrica}</Text>
           </View>
 
           {/* Aberturas */}
           <View style={styles.tableContainer}>
-            <Text style={styles.tableHeader}>Aberturas</Text>
+            <Text style={styles.tableHeader}>Aberturas entregadas</Text>
             <View style={styles.tableRow}>
               <Text style={[styles.tableCell, styles.tableHeader]}>
                 Detalle
