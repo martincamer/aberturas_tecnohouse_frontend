@@ -989,6 +989,11 @@ const ModalNuevaAbertura = ({ addToAberturas }) => {
 const ModalSeleccionarCantidad = ({ idObtenida, addToAberturas }) => {
   const [abertura, setAbertura] = useState([]);
   const [cantidades, setCantidades] = useState(0);
+  const [detalle, setDetalle] = useState("");
+  const [linea, setLinea] = useState("");
+  const [color, setColor] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [medida, setMedida] = useState("");
 
   const generateRandomId = () => Math.floor(Math.random() * 1000000);
   const idRandom = generateRandomId(); // Genera un ID aleatorio
@@ -998,7 +1003,11 @@ const ModalSeleccionarCantidad = ({ idObtenida, addToAberturas }) => {
       const res = await client.get(`/abertura/${idObtenida}`);
 
       setAbertura(res.data);
-      console.log("asdasd", res.data);
+      setDetalle(res.data.detalle);
+      setMedida(res.data.ancho_alto);
+      setColor(res.data.color);
+      setTipo(res.data.tipo);
+      setLinea(res.data.linea);
     };
     obtenerDatos();
   }, [idObtenida]);
@@ -1018,29 +1027,125 @@ const ModalSeleccionarCantidad = ({ idObtenida, addToAberturas }) => {
             <p className="text-lg font-bold">
               Datos de la abertura seleccionada.
             </p>
-            <div className="font-bold text-sm text-blue-500">
-              Detalle :{" "}
-              <span className="text-gray-800 capitalize">
-                {abertura.detalle} - {abertura.ancho_alto}
-              </span>
-            </div>
-            <div className="font-bold text-sm text-blue-500">
-              Linea, color, tipo :{" "}
-              <span className="text-gray-800 capitalize">
-                {" "}
-                {abertura.linea}, {abertura.color}, {abertura.tipo}
-              </span>
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-1">
+              Detalle de la abertura
+              <input
+                className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                value={detalle}
+                onChange={(e) => setDetalle(e.target.value)}
+              />
             </div>{" "}
-          </div>
-
-          <div className="flex flex-col gap-1 items-start">
-            <label className="font-bold">Escribir cantidad.</label>
-            <input
-              className="border border-gray-300 rounded-md py-2 px-2 mb-3 font-bold text-sm outline-none"
-              onChange={(e) => setCantidades(e.target.value)}
-              value={cantidades}
-              type="text"
-            />
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-1">
+              Ancho x Alto
+              <input
+                className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                value={medida}
+                onChange={(e) => setMedida(e.target.value)}
+              />
+            </div>
+            <div className="font-bold text-sm text-blue-500  grid grid-cols-3 gap-2">
+              <div className="flex flex-col gap-1">
+                <p>Tipo</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el tipo...
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"ventana corrediza"} className="font-semibold">
+                    Ventana corrediza
+                  </option>
+                  <option value={"raja de abrir"} className="font-semibold">
+                    Raja de abrir
+                  </option>
+                  <option value={"porton de abrir"} className="font-semibold">
+                    Porton de abrir
+                  </option>
+                  <option value={"puerta de abrir"} className="font-semibold">
+                    Puerta de abrir
+                  </option>
+                  <option value={"celosia de abrir"} className="font-semibold">
+                    Celosia de abrir
+                  </option>
+                  <option value={"celosia corrediza"} className="font-semibold">
+                    Celosia corrediza
+                  </option>
+                  <option value={"paño fijo"} className="font-semibold">
+                    Paño fijo
+                  </option>
+                </select>
+              </div>{" "}
+              <div className="flex flex-col gap-1">
+                <p>Linea</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full capitalize"
+                  value={linea}
+                  onChange={(e) => setLinea(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar la linea...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="herrero">
+                    herrero
+                  </option>
+                  <option className="font-semibold capitalize" value="modena">
+                    modena
+                  </option>
+                  <option
+                    className="font-semibold capitalize"
+                    value="modena a30"
+                  >
+                    modena a30
+                  </option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <p>Color</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full capitalize"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el color...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="blanco">
+                    Blanco
+                  </option>
+                  <option className="font-semibold capitalize" value="negro">
+                    Negro
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-2">
+              Cantidad
+              <div>
+                <input
+                  className="border border-gray-300 rounded-md py-2 px-2 mb-3 font-bold text-sm outline-none text-black"
+                  onChange={(e) => setCantidades(e.target.value)}
+                  value={cantidades}
+                  type="text"
+                />
+              </div>
+            </div>{" "}
           </div>
 
           <div className="flex">
@@ -1048,11 +1153,11 @@ const ModalSeleccionarCantidad = ({ idObtenida, addToAberturas }) => {
               onClick={() => {
                 addToAberturas(
                   abertura.id + idRandom,
-                  abertura.detalle,
-                  abertura.ancho_alto,
-                  abertura.color,
-                  abertura.linea,
-                  abertura.tipo,
+                  detalle,
+                  medida,
+                  color,
+                  linea,
+                  tipo,
                   cantidades
                 ),
                   setCantidades(0),
@@ -1181,7 +1286,7 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
                 {aberturasPedido
                   .slice() // Crear una copia del array para no modificar el original
                   .sort((a, b) => b.id - a.id) // Ordenar por id de mayor a menor
-                  .map((abertura, index) => (
+                  .map((abertura) => (
                     <tr key={abertura.id}>
                       <td>{abertura.id}</td>
                       <td>{abertura.cliente}</td>
@@ -1566,6 +1671,11 @@ const SeleccionarAberturaEditar = ({ addToAberturas }) => {
 const ModalSeleccionarCantidadEditar = ({ idObtenida, addToAberturas }) => {
   const [abertura, setAbertura] = useState([]);
   const [cantidades, setCantidades] = useState(0);
+  const [detalle, setDetalle] = useState("");
+  const [linea, setLinea] = useState("");
+  const [color, setColor] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [medida, setMedida] = useState("");
 
   const generateRandomId = () => Math.floor(Math.random() * 1000000);
   const idRandom = generateRandomId(); // Genera un ID aleatorio
@@ -1575,7 +1685,11 @@ const ModalSeleccionarCantidadEditar = ({ idObtenida, addToAberturas }) => {
       const res = await client.get(`/abertura/${idObtenida}`);
 
       setAbertura(res.data);
-      console.log("asdasd", res.data);
+      setDetalle(res.data.detalle);
+      setMedida(res.data.ancho_alto);
+      setColor(res.data.color);
+      setTipo(res.data.tipo);
+      setLinea(res.data.linea);
     };
     obtenerDatos();
   }, [idObtenida]);
@@ -1595,29 +1709,125 @@ const ModalSeleccionarCantidadEditar = ({ idObtenida, addToAberturas }) => {
             <p className="text-lg font-bold">
               Datos de la abertura seleccionada.
             </p>
-            <div className="font-bold text-sm text-blue-500">
-              Detalle :{" "}
-              <span className="text-gray-800 capitalize">
-                {abertura.detalle} - {abertura.ancho_alto}
-              </span>
-            </div>
-            <div className="font-bold text-sm text-blue-500">
-              Linea, color, tipo :{" "}
-              <span className="text-gray-800 capitalize">
-                {" "}
-                {abertura.linea}, {abertura.color}, {abertura.tipo}
-              </span>
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-1">
+              Detalle de la abertura
+              <input
+                className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                value={detalle}
+                onChange={(e) => setDetalle(e.target.value)}
+              />
             </div>{" "}
-          </div>
-
-          <div className="flex flex-col gap-1 items-start">
-            <label className="font-bold">Escribir cantidad.</label>
-            <input
-              className="border border-gray-300 rounded-md py-2 px-2 mb-3 font-bold text-sm outline-none"
-              onChange={(e) => setCantidades(e.target.value)}
-              value={cantidades}
-              type="text"
-            />
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-1">
+              Ancho x Alto
+              <input
+                className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                value={medida}
+                onChange={(e) => setMedida(e.target.value)}
+              />
+            </div>
+            <div className="font-bold text-sm text-blue-500  grid grid-cols-3 gap-2">
+              <div className="flex flex-col gap-1">
+                <p>Tipo</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full"
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el tipo...
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"ventana corrediza"} className="font-semibold">
+                    Ventana corrediza
+                  </option>
+                  <option value={"raja de abrir"} className="font-semibold">
+                    Raja de abrir
+                  </option>
+                  <option value={"porton de abrir"} className="font-semibold">
+                    Porton de abrir
+                  </option>
+                  <option value={"puerta de abrir"} className="font-semibold">
+                    Puerta de abrir
+                  </option>
+                  <option value={"celosia de abrir"} className="font-semibold">
+                    Celosia de abrir
+                  </option>
+                  <option value={"celosia corrediza"} className="font-semibold">
+                    Celosia corrediza
+                  </option>
+                  <option value={"paño fijo"} className="font-semibold">
+                    Paño fijo
+                  </option>
+                </select>
+              </div>{" "}
+              <div className="flex flex-col gap-1">
+                <p>Linea</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full capitalize"
+                  value={linea}
+                  onChange={(e) => setLinea(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar la linea...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="herrero">
+                    herrero
+                  </option>
+                  <option className="font-semibold capitalize" value="modena">
+                    modena
+                  </option>
+                  <option
+                    className="font-semibold capitalize"
+                    value="modena a30"
+                  >
+                    modena a30
+                  </option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <p>Color</p>
+                <select
+                  className="outline-none border border-gray-300 rounded-md py-1.5 px-2 text-black w-full capitalize"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el color...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="blanco">
+                    Blanco
+                  </option>
+                  <option className="font-semibold capitalize" value="negro">
+                    Negro
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div className="font-bold text-sm text-blue-500 flex flex-col gap-2">
+              Cantidad
+              <div>
+                <input
+                  className="border border-gray-300 rounded-md py-2 px-2 mb-3 font-bold text-sm outline-none text-black"
+                  onChange={(e) => setCantidades(e.target.value)}
+                  value={cantidades}
+                  type="text"
+                />
+              </div>
+            </div>{" "}
           </div>
 
           <div className="flex">
@@ -1625,11 +1835,11 @@ const ModalSeleccionarCantidadEditar = ({ idObtenida, addToAberturas }) => {
               onClick={() => {
                 addToAberturas(
                   abertura.id + idRandom,
-                  abertura.detalle,
-                  abertura.ancho_alto,
-                  abertura.color,
-                  abertura.linea,
-                  abertura.tipo,
+                  detalle,
+                  medida,
+                  color,
+                  linea,
+                  tipo,
                   cantidades
                 ),
                   setCantidades(0),
