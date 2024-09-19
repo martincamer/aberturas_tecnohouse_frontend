@@ -1240,6 +1240,15 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
     );
   };
 
+   const [searchTerm, setSearchTerm] = useState('');
+
+  // Filtrar los pedidos por cliente
+  const filteredAberturas = aberturasPedido
+    .filter(abertura => 
+      abertura.cliente.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => b.id - a.id);
+
   return (
     <dialog id="my_modal_editar_pedido" className="modal">
       <div className="modal-box rounded-md max-w-full h-full max-md:max-h-full max-md:w-full max-md:rounded-none">
@@ -1257,7 +1266,7 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
           onSubmit={handleSubmit(onSubmit)}
           className="mt-4 flex flex-col items-start gap-2"
         >
-          <div className="mt-4 flex gap-2 max-md:flex-col max-md:w-full">
+          <div className="mt-4 flex gap-2 max-md:flex-col max-md:w-full mb-2">
             <button
               onClick={() =>
                 document
@@ -1273,6 +1282,16 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
             </button>
           </div>
 
+          <div >
+        <input
+        type="text"
+        placeholder="Buscar por cliente"
+        className="mb-2 p-2 border border-gray-300 rounded-md bg-white outline-none"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+        </div>
+
           <div className="px-0 max-md:overflow-x-auto max-md:h-[30vh] scrollbar-hidden w-full">
             <table className="table">
               <thead className="text-sm font-bold text-gray-800">
@@ -1283,7 +1302,7 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
               </thead>
 
               <tbody className="text-xs font-medium capitalize">
-                {aberturasPedido
+                {filteredAberturas
                   .slice() // Crear una copia del array para no modificar el original
                   .sort((a, b) => b.id - a.id) // Ordenar por id de mayor a menor
                   .map((abertura) => (
