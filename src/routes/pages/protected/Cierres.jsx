@@ -11,6 +11,7 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import { formatearFecha } from "../../../helpers/formatearFecha";
 import { useObtenerId } from "../../../helpers/obtenerId";
 import { useAuth } from "../../../context/AuthProvider";
+import axios from "axios";
 
 export const Cierres = () => {
   const { cierres } = useAberturasContext();
@@ -141,7 +142,7 @@ export const Cierres = () => {
                     </td>
                     <td>{formatearFecha(cierre.fecha_salida)}</td>
                     <td>
-                      <div className="flex gap-3">
+                      <div className="flex gap-5 items-center">
                         <FaDeleteLeft
                           onClick={() => {
                             handleObtenerId(cierre.id),
@@ -151,6 +152,18 @@ export const Cierres = () => {
                           }}
                           className="text-xl text-red-500 cursor-pointer"
                         />
+
+                        <button
+                          onClick={() => {
+                            handleObtenerId(cierre.id),
+                              document
+                                .getElementById("my_modal_ver_imagenes")
+                                .showModal();
+                          }}
+                          className="text-sm text-green-700 bg-green-100 px-2 py-1 rounded-md font-semibold cursor-pointer"
+                        >
+                          Ver imagenes
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -160,9 +173,62 @@ export const Cierres = () => {
           </div>
           <ModalCrearCierre />
           <ModalEliminar idObtenida={idObtenida} />
+          <ModalVerImagenesRemitos idObtenida={idObtenida} />
         </>
       )}
     </section>
+  );
+};
+
+const ModalVerImagenesRemitos = ({ idObtenida }) => {
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    const obtenerDatos = async () => {
+      try {
+        // Obtener los datos desde la API
+        const respuesta = await client.get(`/cierres/${idObtenida}`);
+        const data = respuesta.data;
+
+        console.log("asdsad", respuesta);
+        // Obtener imágenes
+        const parsedUrls = JSON.parse(data.files);
+        setImageUrls(parsedUrls); // Verify if this is an array
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    obtenerDatos();
+  }, [idObtenida]);
+
+  return (
+    <dialog id="my_modal_ver_imagenes" className="modal">
+      <div className="modal-box rounded-md max-w-4xl h-full scroll-bar">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg">
+          Imágenes de remitos y stock de aberturas.
+        </h3>
+        {/* Renderizar imágenes */}
+        <div className="flex flex-col gap-2 mt-4">
+          {imageUrls &&
+            imageUrls?.map((url, index) => (
+              <div key={index} className="file-preview">
+                <img
+                  src={url}
+                  alt={`Imagen ${index}`}
+                  className="preview-image w-full h-auto object-cover rounded-xl shadow-xl"
+                />
+              </div>
+            ))}
+        </div>
+      </div>
+    </dialog>
   );
 };
 
@@ -170,10 +236,78 @@ export const ModalCrearCierre = () => {
   const { register, handleSubmit, reset } = useForm();
   const { setCierres } = useAberturasContext();
 
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [dragging, setDragging] = useState(false);
+
+  const uploadFiles = async (files) => {
+    if (!files || files.length === 0) {
+      return [];
+    }
+
+    const uploadFile = async (file) => {
+      const data = new FormData();
+      data.append("file", file);
+      const uploadPreset = file.type.startsWith("image/")
+        ? "imagenes"
+        : "documentos";
+      data.append("upload_preset", uploadPreset);
+
+      try {
+        const api = `https://api.cloudinary.com/v1_1/de4aqqalo/${
+          file.type.startsWith("image/") ? "image" : "raw"
+        }/upload`;
+        const res = await axios.post(api, data);
+        return res.data.secure_url;
+      } catch (error) {
+        console.error("Error uploading to Cloudinary:", error);
+        return null;
+      }
+    };
+
+    const promises = files.map(uploadFile);
+    return Promise.all(promises);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragging(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const files = Array.from(event.dataTransfer.files);
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    if (validFiles.length > 0) {
+      setUploadedFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    }
+    setDragging(false);
+  };
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    if (validFiles.length > 0) {
+      setUploadedFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    }
+  };
+
+  const handleRemoveFile = (index) => {
+    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (formData) => {
+    const uploadedFileUrls = await uploadFiles(uploadedFiles);
+
     try {
       const aberturaData = {
         ...formData,
+        files: uploadedFileUrls, // Añade las URLs de los archivos subidos
       };
 
       const res = await client.post("/cierres", aberturaData);
@@ -192,7 +326,7 @@ export const ModalCrearCierre = () => {
 
   return (
     <dialog id="my_modal_crear_cierre" className="modal">
-      <div className="modal-box rounded-md max-md:w-full max-md:max-w-full max-md:h-full max-md:max-h-full max-md:rounded-none">
+      <div className="modal-box max-w-6xl rounded-md max-md:w-full max-md:max-w-full max-md:h-full max-md:max-h-full max-md:rounded-none">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -237,6 +371,21 @@ export const ModalCrearCierre = () => {
               className="border border-gray-300 py-2 px-2 rounded-md font-medium text-sm outline-none w-auto"
             />
           </div>
+          <div className="my-2">
+            <p className="font-bold text-lg">
+              Cargar imagenes de remitos y aberturas en stock.
+            </p>
+
+            <FileDrop
+              dragging={dragging}
+              handleDragLeave={handleDragLeave}
+              handleDragOver={handleDragOver}
+              handleDrop={handleDrop}
+              handleFileChange={handleFileChange}
+              handleRemoveFile={handleRemoveFile}
+              uploadedFile={uploadedFiles}
+            />
+          </div>
           <div>
             <button
               type="submit"
@@ -248,6 +397,61 @@ export const ModalCrearCierre = () => {
         </form>
       </div>
     </dialog>
+  );
+};
+
+// Componente FileDrop
+const FileDrop = ({
+  dragging,
+  handleDragLeave,
+  handleDragOver,
+  handleDrop,
+  handleFileChange,
+  handleRemoveFile,
+  uploadedFile,
+}) => {
+  const renderUploadedFiles = () => {
+    if (!uploadedFile || uploadedFile.length === 0) return null;
+
+    return (
+      <div className="file-preview-container grid grid-cols-2 gap-5 h-[30vh] max-md:grid-cols-1 overflow-y-scroll scroll-bar px-2">
+        {uploadedFile.map((file, index) => (
+          <div key={index} className="file-preview mt-5">
+            <img
+              src={URL.createObjectURL(file)}
+              alt={`Preview ${index}`}
+              className="preview-image max-w-full max-h-[600px]"
+            />
+            <div className="mt-2">
+              <button
+                onClick={() => handleRemoveFile(index)}
+                className="font-bold text-sm bg-red-100/90 px-2 py-2 rounded-md text-red-700"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`dropzone ${dragging ? "dragging" : ""}`}
+    >
+      <input
+        className="bg-gray-800 py-2 px-2 rounded-md text-white font-semibold text-sm"
+        type="file"
+        multiple
+        onChange={handleFileChange}
+        accept="image/*"
+      />
+      {renderUploadedFiles()}
+    </div>
   );
 };
 
