@@ -10,10 +10,11 @@ import {
 import { FaDeleteLeft } from "react-icons/fa6";
 import { formatearFecha } from "../../../helpers/formatearFecha";
 import { useObtenerId } from "../../../helpers/obtenerId";
+import { useAuth } from "../../../context/AuthProvider";
 
 export const Cierres = () => {
   const { cierres } = useAberturasContext();
-
+  const { user } = useAuth();
   const [mesFiltrado, setMesFiltrado] = useState("");
   const [anioFiltrado, setAnioFiltrado] = useState("");
 
@@ -49,114 +50,118 @@ export const Cierres = () => {
   const { handleObtenerId, idObtenida } = useObtenerId();
   return (
     <section className="w-full h-full min-h-screen max-h-full">
-      <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-        <p className="font-bold text-gray-900 text-xl">
-          Sector de cierres mensuales de salidas y stock.
-        </p>
-        <button
-          onClick={() =>
-            document.getElementById("my_modal_crear_cierre").showModal()
-          }
-          type="button"
-          className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
-        >
-          Cargar nuevo cierre del mes.
-        </button>
-      </div>
+      {user.fabrica === "aberturas" && (
+        <>
+          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-bold text-gray-900 text-xl">
+              Sector de cierres mensuales de salidas y stock.
+            </p>
+            <button
+              onClick={() =>
+                document.getElementById("my_modal_crear_cierre").showModal()
+              }
+              type="button"
+              className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
+            >
+              Cargar nuevo cierre del mes.
+            </button>
+          </div>
 
-      {/* Controles de filtro */}
-      <div className="flex gap-1 pt-12 pb-5 px-10">
-        {/* Filtro por mes */}
-        <select
-          value={mesFiltrado}
-          onChange={handleChangeMes}
-          className="p-2 border rounded-md border-gray-300 text-sm font-bold"
-        >
-          <option className="font-bold" value="">
-            Seleccionar mes
-          </option>
-          <option value="1">Enero</option>
-          <option value="2">Febrero</option>
-          <option value="3">Marzo</option>
-          <option value="4">Abril</option>
-          <option value="5">Mayo</option>
-          <option value="6">Junio</option>
-          <option value="7">Julio</option>
-          <option value="8">Agosto</option>
-          <option value="9">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12">Diciembre</option>
-        </select>
+          {/* Controles de filtro */}
+          <div className="flex gap-1 pt-12 pb-5 px-10">
+            {/* Filtro por mes */}
+            <select
+              value={mesFiltrado}
+              onChange={handleChangeMes}
+              className="p-2 border rounded-md border-gray-300 text-sm font-bold"
+            >
+              <option className="font-bold" value="">
+                Seleccionar mes
+              </option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
 
-        {/* Filtro por año */}
-        <select
-          value={anioFiltrado}
-          onChange={handleChangeAnio}
-          className="p-2 border rounded-md border-gray-300 text-sm font-bold"
-        >
-          <option className="font-bold" value="">
-            Seleccionar año
-          </option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-          <option value="2028">2028</option>
-          <option value="2029">2029</option>
-          <option value="2030">2030</option>
-          {/* Agrega más opciones de años según tus necesidades */}
-        </select>
-      </div>
+            {/* Filtro por año */}
+            <select
+              value={anioFiltrado}
+              onChange={handleChangeAnio}
+              className="p-2 border rounded-md border-gray-300 text-sm font-bold"
+            >
+              <option className="font-bold" value="">
+                Seleccionar año
+              </option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              {/* Agrega más opciones de años según tus necesidades */}
+            </select>
+          </div>
 
-      <div className="px-10 max-md:overflow-x-auto scrollbar-hidden pb-12 pt-0 max-md:px-3">
-        <table className="table">
-          <thead className="text-sm font-bold text-gray-800">
-            <tr>
-              <th>Referencia</th>
-              <th>Total en salidas</th>
-              <th>Total en stock</th>
-              <th>Total numero</th>
-              <th>Fecha del cierre</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+          <div className="px-10 max-md:overflow-x-auto scrollbar-hidden pb-12 pt-0 max-md:px-3">
+            <table className="table">
+              <thead className="text-sm font-bold text-gray-800">
+                <tr>
+                  <th>Referencia</th>
+                  <th>Total en salidas</th>
+                  <th>Total en stock</th>
+                  <th>Total numero</th>
+                  <th>Fecha del cierre</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
 
-          <tbody className="text-xs font-medium capitalize ">
-            {cierres.filter(filtrarCierres).map((cierre) => (
-              <tr key={cierre.id}>
-                <td>{cierre.id}</td>
-                <td>{cierre.numero_salidas}</td>
-                <td>{cierre.numero_stock}</td>
-                <td>
-                  <div className="flex">
-                    <p className="bg-primary/10 py-2 px-2 rounded-md text-primary font-extrabold">
-                      {Number(cierre.numero_salidas) +
-                        Number(cierre.numero_stock)}
-                    </p>
-                  </div>
-                </td>
-                <td>{formatearFecha(cierre.fecha_salida)}</td>
-                <td>
-                  <div className="flex gap-3">
-                    <FaDeleteLeft
-                      onClick={() => {
-                        handleObtenerId(cierre.id),
-                          document
-                            .getElementById("my_modal_eliminar")
-                            .showModal();
-                      }}
-                      className="text-xl text-red-500 cursor-pointer"
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <ModalCrearCierre />
-      <ModalEliminar idObtenida={idObtenida} />
+              <tbody className="text-xs font-medium capitalize ">
+                {cierres.filter(filtrarCierres).map((cierre) => (
+                  <tr key={cierre.id}>
+                    <td>{cierre.id}</td>
+                    <td>{cierre.numero_salidas}</td>
+                    <td>{cierre.numero_stock}</td>
+                    <td>
+                      <div className="flex">
+                        <p className="bg-primary/10 py-2 px-2 rounded-md text-primary font-extrabold">
+                          {Number(cierre.numero_salidas) +
+                            Number(cierre.numero_stock)}
+                        </p>
+                      </div>
+                    </td>
+                    <td>{formatearFecha(cierre.fecha_salida)}</td>
+                    <td>
+                      <div className="flex gap-3">
+                        <FaDeleteLeft
+                          onClick={() => {
+                            handleObtenerId(cierre.id),
+                              document
+                                .getElementById("my_modal_eliminar")
+                                .showModal();
+                          }}
+                          className="text-xl text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ModalCrearCierre />
+          <ModalEliminar idObtenida={idObtenida} />
+        </>
+      )}
     </section>
   );
 };

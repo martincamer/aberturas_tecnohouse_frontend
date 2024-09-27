@@ -23,7 +23,9 @@ export const MenuMobile = () => {
     <div
       className={`${
         isOpen ? "w-64 opacity-1" : "w-0 opacity-1"
-      } transition-all ease-linear flex flex-col bg-white min-h-[220vh] max-h-full h-full z-[100] border-r max-md:fixed md:hidden`}
+      } transition-all ease-linear flex flex-col bg-white min-h-[220vh] max-h-full h-full z-[100] border-r max-md:fixed md:hidden ${
+        user.username !== "Tecnohouse" && "hidden"
+      }`}
     >
       {/* Botón de menú */}
       <div

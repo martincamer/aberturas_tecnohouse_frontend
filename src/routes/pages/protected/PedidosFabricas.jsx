@@ -9,9 +9,11 @@ import client from "../../../api/axios";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { ImprimirPedido } from "../../../components/pdf/ImprimirPedido";
 import { ImprimirHojaProduccion } from "../../../components/pdf/ImprimirHojaProduccion";
+import { useAuth } from "../../../context/AuthProvider";
 
 export const PedidosFabricas = () => {
   const [pedidos, setPedidos] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -82,159 +84,163 @@ export const PedidosFabricas = () => {
 
   return (
     <section className="w-full h-full min-h-screen max-h-full max-w-full">
-      <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-        <p className="font-bold text-gray-900 text-xl">
-          Sector pedidos, generar nuevo.
-        </p>
-      </div>
-
-      <div className="mb-4 flex gap-2 px-10 py-5">
-        <div className="">
-          <label className="block text-sm font-medium text-gray-700">
-            Fábrica:
-          </label>
-          <select
-            value={selectedFactory}
-            onChange={(e) => setSelectedFactory(e.target.value)}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
-          >
-            <option value="">Todas</option>
-            {factories.map((factory, index) => (
-              <option key={index} value={factory}>
-                {factory}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex gap-2">
-          <div>
-            <label
-              htmlFor="mes"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Mes
-            </label>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              id="mes"
-              name="mes"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
-            >
-              <option value="">Seleccione un mes</option>
-              <option value="01">Enero</option>
-              <option value="02">Febrero</option>
-              <option value="03">Marzo</option>
-              <option value="04">Abril</option>
-              <option value="05">Mayo</option>
-              <option value="06">Junio</option>
-              <option value="07">Julio</option>
-              <option value="08">Agosto</option>
-              <option value="09">Septiembre</option>
-              <option value="10">Octubre</option>
-              <option value="11">Noviembre</option>
-              <option value="12">Diciembre</option>
-            </select>
+      {user.fabrica === "aberturas" && (
+        <>
+          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-bold text-gray-900 text-xl">
+              Sector pedidos, generar nuevo.
+            </p>
           </div>
 
-          <div>
-            <label
-              htmlFor="ano"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Año
-            </label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              id="ano"
-              name="ano"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
-            >
-              <option value="">Seleccione un año</option>
-              {Array.from(
-                { length: 2050 - 2024 + 1 },
-                (_, index) => 2024 + index
-              ).map((ano) => (
-                <option key={ano} value={ano}>
-                  {ano}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
+          <div className="mb-4 flex gap-2 px-10 py-5">
+            <div className="">
+              <label className="block text-sm font-medium text-gray-700">
+                Fábrica:
+              </label>
+              <select
+                value={selectedFactory}
+                onChange={(e) => setSelectedFactory(e.target.value)}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
+              >
+                <option value="">Todas</option>
+                {factories.map((factory, index) => (
+                  <option key={index} value={factory}>
+                    {factory}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-      <div className="px-10">
-        <table className="table">
-          <thead className="text-sm font-bold text-gray-800">
-            <tr>
-              <th>Refer.</th>
-              <th>Fabrica</th>
-              <th>Ver pedido completo</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody className="text-xs font-medium capitalize">
-            {filteredPedidos.map((pedido) => (
-              <tr key={pedido.id}>
-                <td>{pedido.id}</td>
-                <td>{pedido.fabrica}</td>
-                <td>
-                  <button
-                    onClick={() => {
-                      handleObtenerId(pedido.id),
-                        document
-                          .getElementById("my_modal_pedido_completo")
-                          .showModal();
-                    }}
-                    type="button"
-                    className="bg-primary py-2 px-4 rounded-md text-white font-bold"
-                  >
-                    Ver pedido
-                  </button>
-                </td>
-                <td>{formatearFecha(pedido.created_at)}</td>
-                <td>
-                  <div className="flex">
-                    <p
-                      className={`${
-                        (pedido.estado === "pendiente" &&
-                          "bg-orange-500 text-white") ||
-                        (pedido.estado === "finalizado" &&
-                          "bg-green-500 text-white") ||
-                        (pedido.estado === "incompleto" &&
-                          "bg-red-500 text-white")
-                      } py-2 px-4 rounded-md font-bold`}
-                    >
-                      {pedido.estado}
-                    </p>
-                  </div>
-                </td>
-                <td>
-                  <div className="flex">
-                    <button
-                      onClick={() => {
-                        handleObtenerId(pedido.id),
-                          document
-                            .getElementById("my_modal_estado")
-                            .showModal();
-                      }}
-                      type="button"
-                      className="bg-blue-500 text-white font-bold text-center py-2 px-4 rounded-md"
-                    >
-                      Editar estado
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <ModalPedidoCompleto idObtenida={idObtenida} />
-      <ModalEstado idObtenida={idObtenida} setPedidos={setPedidos} />
+            <div className="flex gap-2">
+              <div>
+                <label
+                  htmlFor="mes"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Mes
+                </label>
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  id="mes"
+                  name="mes"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
+                >
+                  <option value="">Seleccione un mes</option>
+                  <option value="01">Enero</option>
+                  <option value="02">Febrero</option>
+                  <option value="03">Marzo</option>
+                  <option value="04">Abril</option>
+                  <option value="05">Mayo</option>
+                  <option value="06">Junio</option>
+                  <option value="07">Julio</option>
+                  <option value="08">Agosto</option>
+                  <option value="09">Septiembre</option>
+                  <option value="10">Octubre</option>
+                  <option value="11">Noviembre</option>
+                  <option value="12">Diciembre</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="ano"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Año
+                </label>
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  id="ano"
+                  name="ano"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm"
+                >
+                  <option value="">Seleccione un año</option>
+                  {Array.from(
+                    { length: 2050 - 2024 + 1 },
+                    (_, index) => 2024 + index
+                  ).map((ano) => (
+                    <option key={ano} value={ano}>
+                      {ano}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-10">
+            <table className="table">
+              <thead className="text-sm font-bold text-gray-800">
+                <tr>
+                  <th>Refer.</th>
+                  <th>Fabrica</th>
+                  <th>Ver pedido completo</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody className="text-xs font-medium capitalize">
+                {filteredPedidos.map((pedido) => (
+                  <tr key={pedido.id}>
+                    <td>{pedido.id}</td>
+                    <td>{pedido.fabrica}</td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          handleObtenerId(pedido.id),
+                            document
+                              .getElementById("my_modal_pedido_completo")
+                              .showModal();
+                        }}
+                        type="button"
+                        className="bg-primary py-2 px-4 rounded-md text-white font-bold"
+                      >
+                        Ver pedido
+                      </button>
+                    </td>
+                    <td>{formatearFecha(pedido.created_at)}</td>
+                    <td>
+                      <div className="flex">
+                        <p
+                          className={`${
+                            (pedido.estado === "pendiente" &&
+                              "bg-orange-500 text-white") ||
+                            (pedido.estado === "finalizado" &&
+                              "bg-green-500 text-white") ||
+                            (pedido.estado === "incompleto" &&
+                              "bg-red-500 text-white")
+                          } py-2 px-4 rounded-md font-bold`}
+                        >
+                          {pedido.estado}
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex">
+                        <button
+                          onClick={() => {
+                            handleObtenerId(pedido.id),
+                              document
+                                .getElementById("my_modal_estado")
+                                .showModal();
+                          }}
+                          type="button"
+                          className="bg-blue-500 text-white font-bold text-center py-2 px-4 rounded-md"
+                        >
+                          Editar estado
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ModalPedidoCompleto idObtenida={idObtenida} />
+          <ModalEstado idObtenida={idObtenida} setPedidos={setPedidos} />
+        </>
+      )}
     </section>
   );
 };

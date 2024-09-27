@@ -10,9 +10,11 @@ import {
   showSuccessToast,
   showSuccessToastError,
 } from "../../../helpers/toast";
+import { useAuth } from "../../../context/AuthProvider";
 
 export const Aberturas = () => {
   const { aberturas } = useAberturasContext();
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -59,186 +61,204 @@ export const Aberturas = () => {
 
   return (
     <section className="w-full h-full min-h-screen max-h-full">
-      <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-        <p className="font-bold text-gray-900 text-xl">Sector de aberturas.</p>
-        <button
-          onClick={() =>
-            document.getElementById("my_modal_nueva_abertura").showModal()
-          }
-          type="button"
-          className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
-        >
-          Cargar nueva abertura
-        </button>
-      </div>
-
-      <div className="px-10 pt-10">
-        <div>
-          <p className="font-bold flex items-center gap-3">
-            Numero del stock en fabrica/sistema{" "}
-            <span className="font-extrabold bg-green-100/90 py-1 px-4 rounded-md text-green-700">
-              {stockTotal}
-            </span>
-          </p>
-        </div>
-      </div>
-
-      <div className="py-10 px-10 max-md:px-5">
-        <div className="flex gap-2 max-md:flex-col max-md:w-auto">
-          <div className="border border-gray-300  max-md:w-auto  flex items-center gap-2 w-1/5 px-2 py-1.5 text-sm rounded-md">
-            <input
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              type="text"
-              className="outline-none font-medium w-full"
-              placeholder="Buscar por abertura por el detalle.."
-            />
-            <FaSearch className="text-gray-700" />
-          </div>
-
-          <div>
-            <select
-              value={selectedTipo}
-              onChange={(e) => setSelectedTipo(e.target.value)}
-              className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+      {user.fabrica === "aberturas" && (
+        <>
+          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-bold text-gray-900 text-xl">
+              Sector de aberturas.
+            </p>
+            <button
+              onClick={() =>
+                document.getElementById("my_modal_nueva_abertura").showModal()
+              }
+              type="button"
+              className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
             >
-              <option className="font-bold capitalize text-primary" value="">
-                Seleccionar el tipo...
-              </option>
-              <option value={"mosquiteros"} className="font-semibold">
-                Mosquiteros
-              </option>
-              <option value={"ventana corrediza"} className="font-semibold">
-                Ventana corrediza
-              </option>
-              <option value={"raja de abrir"} className="font-semibold">
-                Raja de abrir
-              </option>
-              <option value={"porton de abrir"} className="font-semibold">
-                Porton de abrir
-              </option>
-              <option value={"puerta de abrir"} className="font-semibold">
-                Puerta de abrir
-              </option>
-              <option value={"celosia de abrir"} className="font-semibold">
-                Celosia de abrir
-              </option>
-              <option value={"celosia corrediza"} className="font-semibold">
-                Celosia corrediza
-              </option>
-              <option value={"paño fijo"} className="font-semibold">
-                Paño fijo
-              </option>
-            </select>
+              Cargar nueva abertura
+            </button>
           </div>
-          <div>
-            <select
-              value={selectedColor}
-              onChange={(e) => setSelectedColor(e.target.value)}
-              className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
-            >
-              <option className="font-bold capitalize text-primary" value="">
-                Seleccionar el color...
-              </option>{" "}
-              <option className="font-semibold capitalize" value="blanco">
-                Blanco
-              </option>
-              <option className="font-semibold capitalize" value="negro">
-                Negro
-              </option>
-            </select>
+
+          <div className="px-10 pt-10">
+            <div>
+              <p className="font-bold flex items-center gap-3">
+                Numero del stock en fabrica/sistema{" "}
+                <span className="font-extrabold bg-green-100/90 py-1 px-4 rounded-md text-green-700">
+                  {stockTotal}
+                </span>
+              </p>
+            </div>
           </div>
-          <div>
-            <select
-              value={selectedLinea}
-              onChange={(e) => setSelectedLinea(e.target.value)}
-              className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
-            >
-              <option className="font-bold capitalize text-primary" value="">
-                Seleccionar la linea...
-              </option>{" "}
-              <option className="font-semibold capitalize" value="herrero">
-                herrero
-              </option>
-              <option className="font-semibold capitalize" value="modena">
-                modena
-              </option>
-              <option className="font-semibold capitalize" value="modena a30">
-                modena a30
-              </option>
-            </select>
+
+          <div className="py-10 px-10 max-md:px-5">
+            <div className="flex gap-2 max-md:flex-col max-md:w-auto">
+              <div className="border border-gray-300  max-md:w-auto  flex items-center gap-2 w-1/5 px-2 py-1.5 text-sm rounded-md">
+                <input
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  type="text"
+                  className="outline-none font-medium w-full"
+                  placeholder="Buscar por abertura por el detalle.."
+                />
+                <FaSearch className="text-gray-700" />
+              </div>
+
+              <div>
+                <select
+                  value={selectedTipo}
+                  onChange={(e) => setSelectedTipo(e.target.value)}
+                  className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el tipo...
+                  </option>
+                  <option value={"mosquiteros"} className="font-semibold">
+                    Mosquiteros
+                  </option>
+                  <option value={"ventana corrediza"} className="font-semibold">
+                    Ventana corrediza
+                  </option>
+                  <option value={"raja de abrir"} className="font-semibold">
+                    Raja de abrir
+                  </option>
+                  <option value={"porton de abrir"} className="font-semibold">
+                    Porton de abrir
+                  </option>
+                  <option value={"puerta de abrir"} className="font-semibold">
+                    Puerta de abrir
+                  </option>
+                  <option value={"celosia de abrir"} className="font-semibold">
+                    Celosia de abrir
+                  </option>
+                  <option value={"celosia corrediza"} className="font-semibold">
+                    Celosia corrediza
+                  </option>
+                  <option value={"paño fijo"} className="font-semibold">
+                    Paño fijo
+                  </option>
+                </select>
+              </div>
+              <div>
+                <select
+                  value={selectedColor}
+                  onChange={(e) => setSelectedColor(e.target.value)}
+                  className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar el color...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="blanco">
+                    Blanco
+                  </option>
+                  <option className="font-semibold capitalize" value="negro">
+                    Negro
+                  </option>
+                </select>
+              </div>
+              <div>
+                <select
+                  value={selectedLinea}
+                  onChange={(e) => setSelectedLinea(e.target.value)}
+                  className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar la linea...
+                  </option>{" "}
+                  <option className="font-semibold capitalize" value="herrero">
+                    herrero
+                  </option>
+                  <option className="font-semibold capitalize" value="modena">
+                    modena
+                  </option>
+                  <option
+                    className="font-semibold capitalize"
+                    value="modena a30"
+                  >
+                    modena a30
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="px-10 max-md:overflow-x-auto scrollbar-hidden max-md:px-5">
-        <table className="table">
-          <thead className="text-sm font-bold text-gray-800">
-            <tr>
-              <th>Numero</th>
-              <th>Detalle</th>
-              <th>Color</th>
-              <th>Linea</th>
-              <th>Tipo</th>
-              <th>Anchoxalto</th>
-              <th>Stock</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+          <div className="px-10 max-md:overflow-x-auto scrollbar-hidden max-md:px-5">
+            <table className="table">
+              <thead className="text-sm font-bold text-gray-800">
+                <tr>
+                  <th>Numero</th>
+                  <th>Detalle</th>
+                  <th>Color</th>
+                  <th>Linea</th>
+                  <th>Tipo</th>
+                  <th>Anchoxalto</th>
+                  <th>Stock</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
 
-          <tbody className="text-xs font-medium capitalize">
-            {filteredData.map((abertura) => (
-              <tr key={abertura.id}>
-                <td>{abertura.id}</td>
-                <td>{abertura.detalle}</td>
-                <td>{abertura.color}</td>
-                <td>{abertura.linea}</td>
-                <td>{abertura.tipo}</td>
-                <td>{abertura.ancho_alto}</td>
-                <td>
-                  <div className="flex">
-                    <p
-                      className={`${
-                        abertura.stock > 0
-                          ? "bg-green-100/90 text-green-700"
-                          : "bg-red-100/90 text-red-700"
-                      } py-1 px-2 rounded-md font-bold`}
-                    >
-                      {abertura.stock}
-                    </p>
-                  </div>
-                </td>
-                <td>
-                  <div className="flex gap-3">
-                    <FaEdit
-                      onClick={() => {
-                        handleObtenerId(abertura.id),
-                          document
-                            .getElementById("my_modal_actualizar_abertura")
-                            .showModal();
-                      }}
-                      className="text-xl text-blue-500 cursor-pointer"
-                    />
-                    <FaDeleteLeft
-                      onClick={() => {
-                        handleObtenerId(abertura.id),
-                          document
-                            .getElementById("my_modal_eliminar")
-                            .showModal();
-                      }}
-                      className="text-xl text-red-500 cursor-pointer"
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              <tbody className="text-xs font-medium capitalize">
+                {filteredData.map((abertura) => (
+                  <tr key={abertura.id}>
+                    <td>{abertura.id}</td>
+                    <td>{abertura.detalle}</td>
+                    <td>{abertura.color}</td>
+                    <td>{abertura.linea}</td>
+                    <td>{abertura.tipo}</td>
+                    <td>{abertura.ancho_alto}</td>
+                    <td>
+                      <div className="flex">
+                        <p
+                          className={`${
+                            abertura.stock > 0
+                              ? "bg-green-100/90 text-green-700"
+                              : "bg-red-100/90 text-red-700"
+                          } py-1 px-2 rounded-md font-bold`}
+                        >
+                          {abertura.stock}
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex gap-3">
+                        <FaEdit
+                          onClick={() => {
+                            handleObtenerId(abertura.id),
+                              document
+                                .getElementById("my_modal_actualizar_abertura")
+                                .showModal();
+                          }}
+                          className="text-xl text-blue-500 cursor-pointer"
+                        />
+                        <FaDeleteLeft
+                          onClick={() => {
+                            handleObtenerId(abertura.id),
+                              document
+                                .getElementById("my_modal_eliminar")
+                                .showModal();
+                          }}
+                          className="text-xl text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      <ModalCrearNuevaAbertura />
-      <ModalActualizarAbertura idObtenida={idObtenida} />
-      <ModalEliminar idObtenida={idObtenida} />
+          <ModalCrearNuevaAbertura />
+          <ModalActualizarAbertura idObtenida={idObtenida} />
+          <ModalEliminar idObtenida={idObtenida} />
+        </>
+      )}
     </section>
   );
 };

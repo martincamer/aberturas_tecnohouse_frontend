@@ -22,8 +22,6 @@ import { PedidosFabricas } from "./routes/pages/protected/PedidosFabricas.jsx";
 function App() {
   const { isAuth, user } = useAuth();
 
-  console.log("asdas", user);
-
   const [isLoading, setIsLoading] = useState(true); // Estado de carga
 
   // Simula un tiempo de carga de 5 segundos

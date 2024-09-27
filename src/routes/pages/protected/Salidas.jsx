@@ -17,9 +17,11 @@ import { formatearFecha } from "../../../helpers/formatearFecha";
 import axios from "axios";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { ImprimirTodosLasSalidas } from "../../../components/pdf/ImprimirTodosLasSalidas";
+import { useAuth } from "../../../context/AuthProvider";
 
 export const Salidas = () => {
   const { salidas, fabricas, aberturas } = useAberturasContext();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFabrica, setSelectedFabrica] = useState("");
 
@@ -176,261 +178,272 @@ export const Salidas = () => {
 
   return (
     <section className="w-full h-full min-h-screen max-h-full">
-      <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-        <p className="font-bold text-gray-900 text-xl">Sector de salidas.</p>
-        <button
-          onClick={() =>
-            document.getElementById("my_modal_nueva_salida").showModal()
-          }
-          type="button"
-          className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
-        >
-          Cargar nueva salida de aberturas
-        </button>
-      </div>
-
-      <div className="dropdown dropdown-hover px-10 py-10 max-md:px-5">
-        <div
-          tabIndex={0}
-          role="button"
-          className="bg-primary py-2 px-4 rounded-md text-white font-semibold text-sm"
-        >
-          Estadisticas de las salidas
-        </div>
-        <ul
-          tabIndex={0}
-          className="dropdown-content menu bg-gray-800 rounded-md z-[1] w-[600px] p-2 shadow mt-0.5 max-md:w-[300px]"
-        >
-          <div className="grid grid-cols-2 text-base py-3 px-3 gap-2 max-md:grid-cols-1">
-            <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
-              <p className="font-medium text-gray-800">
-                Total aberturas entregadas
-              </p>
-              <p className="font-bold text-gray-800">{totalCantidad}</p>
-            </div>{" "}
-            <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
-              <p className="font-medium text-gray-800">
-                Aberturas en stock sistema
-              </p>
-              <p className="font-bold text-gray-800">{totalStock}</p>
-            </div>
-            <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
-              <p className="font-medium text-gray-800">Contratos de salidas</p>
-              <p className="font-bold text-blue-500">{totalContratos}</p>
-            </div>
-          </div>
-        </ul>
-      </div>
-      <div className="px-10 font-bold mb-1 max-md:px-5">
-        <p>Filtrar por fecha</p>
-      </div>
-      <div className="flex px-10 pb-3 max-md:px-5">
-        <div className="flex gap-3">
-          <div className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold">
-            <input
-              value={fechaInicio}
-              onChange={handleFechaInicioChange}
-              type="date"
-              className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
-              placeholder="Fecha de inicio"
-            />
-          </div>
-          <div className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold">
-            <input
-              value={fechaFin}
-              onChange={handleFechaFinChange}
-              type="date"
-              className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
-              placeholder="Fecha fin"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="py-0 px-10 max-md:px-5">
-        <div className="flex gap-2 max-md:flex-col max-md:w-auto">
-          <div className="border border-gray-300 flex items-center gap-2 w-1/5 px-2 py-1.5 text-sm rounded-md max-md:w-auto">
-            <input
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              type="text"
-              className="outline-none font-medium w-full"
-              placeholder="Buscar por fabrica.."
-            />
-            <FaSearch className="text-gray-700" />
-          </div>
-
-          <div>
-            <select
-              value={selectedFabrica}
-              onChange={(e) => setSelectedFabrica(e.target.value)}
-              className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+      {user.fabrica === "aberturas" && (
+        <>
+          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-bold text-gray-900 text-xl">
+              Sector de salidas.
+            </p>
+            <button
+              onClick={() =>
+                document.getElementById("my_modal_nueva_salida").showModal()
+              }
+              type="button"
+              className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
             >
-              <option className="font-bold capitalize text-primary" value="">
-                Seleccionar la fabrica...
-              </option>
-              {fabricas.map((fabrica) => (
-                <option
-                  className="font-semibold"
-                  key={fabrica.id}
-                  value={fabrica.nombre}
-                >
-                  {fabrica.nombre}
-                </option>
-              ))}
-            </select>
+              Cargar nueva salida de aberturas
+            </button>
           </div>
-        </div>
-        <div className="mt-3">
-          <PDFDownloadLink
-            className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
-            fileName={`Resumen filtrado desde ${fechaInicio} - ${fechaFin}`}
-            document={
-              <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
-            }
-          >
-            Descargar resumen..
-          </PDFDownloadLink>
-        </div>
-      </div>
 
-      <div className="px-10 max-md:overflow-x-auto scrollbar-hidden pb-12 pt-5 max-md:px-3">
-        <table className="table">
-          <thead className="text-sm font-bold text-gray-800">
-            <tr>
-              <th>Referencia</th>
-              <th>Fabrica de la salida</th>
-              <th>Total aberturas</th>
-              {/* <th>Remitos cargados</th> */}
-              <th>Fecha de salida</th>
-              <th>Fecha de carga al sistema</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+          <div className="dropdown dropdown-hover px-10 py-10 max-md:px-5">
+            <div
+              tabIndex={0}
+              role="button"
+              className="bg-primary py-2 px-4 rounded-md text-white font-semibold text-sm"
+            >
+              Estadisticas de las salidas
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-gray-800 rounded-md z-[1] w-[600px] p-2 shadow mt-0.5 max-md:w-[300px]"
+            >
+              <div className="grid grid-cols-2 text-base py-3 px-3 gap-2 max-md:grid-cols-1">
+                <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
+                  <p className="font-medium text-gray-800">
+                    Total aberturas entregadas
+                  </p>
+                  <p className="font-bold text-gray-800">{totalCantidad}</p>
+                </div>{" "}
+                <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
+                  <p className="font-medium text-gray-800">
+                    Aberturas en stock sistema
+                  </p>
+                  <p className="font-bold text-gray-800">{totalStock}</p>
+                </div>
+                <div className="bg-white rounded-md py-5 px-5 flex flex-col gap-1">
+                  <p className="font-medium text-gray-800">
+                    Contratos de salidas
+                  </p>
+                  <p className="font-bold text-blue-500">{totalContratos}</p>
+                </div>
+              </div>
+            </ul>
+          </div>
+          <div className="px-10 font-bold mb-1 max-md:px-5">
+            <p>Filtrar por fecha</p>
+          </div>
+          <div className="flex px-10 pb-3 max-md:px-5">
+            <div className="flex gap-3">
+              <div className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold">
+                <input
+                  value={fechaInicio}
+                  onChange={handleFechaInicioChange}
+                  type="date"
+                  className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
+                  placeholder="Fecha de inicio"
+                />
+              </div>
+              <div className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold">
+                <input
+                  value={fechaFin}
+                  onChange={handleFechaFinChange}
+                  type="date"
+                  className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
+                  placeholder="Fecha fin"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="py-0 px-10 max-md:px-5">
+            <div className="flex gap-2 max-md:flex-col max-md:w-auto">
+              <div className="border border-gray-300 flex items-center gap-2 w-1/5 px-2 py-1.5 text-sm rounded-md max-md:w-auto">
+                <input
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  type="text"
+                  className="outline-none font-medium w-full"
+                  placeholder="Buscar por fabrica.."
+                />
+                <FaSearch className="text-gray-700" />
+              </div>
 
-          <tbody className="text-xs font-medium capitalize ">
-            {filteredData.map((fabrica) => (
-              <tr key={fabrica.id}>
-                <td>{fabrica.id}</td>
-                <td>{fabrica.fabrica}</td>
-                <td>
-                  <div className="flex">
-                    <p className="font-bold text-white bg-blue-500 py-1 px-3 rounded-md">
-                      {calcularMontoTotal(fabrica.aberturas)}
-                    </p>
-                  </div>
-                </td>{" "}
-                {/* <td>{renderRemitos(fabrica.remitos)}</td> */}
-                <td>
-                  <p>{formatearFecha(fabrica.fecha_salida)}</p>
-                </td>{" "}
-                <td>
-                  <p>{formatearFecha(fabrica.created_at)}</p>
-                </td>
-                <td className="md:hidden">
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_ver_imagenes_remitos")
-                            .showModal();
-                      }}
-                      className="font-bold bg-primary text-white rounded-md py-1 px-2"
+              <div>
+                <select
+                  value={selectedFabrica}
+                  onChange={(e) => setSelectedFabrica(e.target.value)}
+                  className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+                >
+                  <option
+                    className="font-bold capitalize text-primary"
+                    value=""
+                  >
+                    Seleccionar la fabrica...
+                  </option>
+                  {fabricas.map((fabrica) => (
+                    <option
+                      className="font-semibold"
+                      key={fabrica.id}
+                      value={fabrica.nombre}
                     >
-                      rem.
-                    </button>{" "}
-                    <button
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_ver_aberturas")
-                            .showModal();
-                      }}
-                      className="font-bold bg-blue-500 text-white rounded-md py-1 px-2"
-                    >
-                      aber.
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_ver_contratos")
-                            .showModal();
-                      }}
-                      className="font-bold bg-green-500 text-white rounded-md py-1 px-2"
-                    >
-                      Contratos.
-                    </button>
-                  </div>
-                </td>
-                <td className="max-md:hidden">
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_ver_imagenes_remitos")
-                            .showModal();
-                      }}
-                      className="font-bold bg-primary text-white rounded-md py-1 px-2"
-                    >
-                      Ver remitos
-                    </button>{" "}
-                    <button
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_ver_contratos")
-                            .showModal();
-                      }}
-                      className="font-bold bg-primary text-white rounded-md py-1 px-2"
-                    >
-                      Ver contratos
-                    </button>{" "}
-                    <button
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_ver_aberturas")
-                            .showModal();
-                      }}
-                      className="font-bold bg-blue-500 text-white rounded-md py-1 px-2"
-                    >
-                      Ver aberturas
-                    </button>
-                  </div>
-                </td>
-                <td>
-                  <div className="flex gap-3">
-                    {/* <FaEdit className="text-xl text-blue-500 cursor-pointer" /> */}
-                    <FaDeleteLeft
-                      onClick={() => {
-                        handleObtenerId(fabrica.id),
-                          document
-                            .getElementById("my_modal_eliminar")
-                            .showModal();
-                      }}
-                      className="text-xl text-red-500 cursor-pointer"
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                      {fabrica.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="mt-3">
+              <PDFDownloadLink
+                className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
+                fileName={`Resumen filtrado desde ${fechaInicio} - ${fechaFin}`}
+                document={
+                  <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
+                }
+              >
+                Descargar resumen..
+              </PDFDownloadLink>
+            </div>
+          </div>
 
-      {/* <div>
+          <div className="px-10 max-md:overflow-x-auto scrollbar-hidden pb-12 pt-5 max-md:px-3">
+            <table className="table">
+              <thead className="text-sm font-bold text-gray-800">
+                <tr>
+                  <th>Referencia</th>
+                  <th>Fabrica de la salida</th>
+                  <th>Total aberturas</th>
+                  {/* <th>Remitos cargados</th> */}
+                  <th>Fecha de salida</th>
+                  <th>Fecha de carga al sistema</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody className="text-xs font-medium capitalize ">
+                {filteredData.map((fabrica) => (
+                  <tr key={fabrica.id}>
+                    <td>{fabrica.id}</td>
+                    <td>{fabrica.fabrica}</td>
+                    <td>
+                      <div className="flex">
+                        <p className="font-bold text-white bg-blue-500 py-1 px-3 rounded-md">
+                          {calcularMontoTotal(fabrica.aberturas)}
+                        </p>
+                      </div>
+                    </td>{" "}
+                    {/* <td>{renderRemitos(fabrica.remitos)}</td> */}
+                    <td>
+                      <p>{formatearFecha(fabrica.fecha_salida)}</p>
+                    </td>{" "}
+                    <td>
+                      <p>{formatearFecha(fabrica.created_at)}</p>
+                    </td>
+                    <td className="md:hidden">
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_ver_imagenes_remitos")
+                                .showModal();
+                          }}
+                          className="font-bold bg-primary text-white rounded-md py-1 px-2"
+                        >
+                          rem.
+                        </button>{" "}
+                        <button
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_ver_aberturas")
+                                .showModal();
+                          }}
+                          className="font-bold bg-blue-500 text-white rounded-md py-1 px-2"
+                        >
+                          aber.
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_ver_contratos")
+                                .showModal();
+                          }}
+                          className="font-bold bg-green-500 text-white rounded-md py-1 px-2"
+                        >
+                          Contratos.
+                        </button>
+                      </div>
+                    </td>
+                    <td className="max-md:hidden">
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_ver_imagenes_remitos")
+                                .showModal();
+                          }}
+                          className="font-bold bg-primary text-white rounded-md py-1 px-2"
+                        >
+                          Ver remitos
+                        </button>{" "}
+                        <button
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_ver_contratos")
+                                .showModal();
+                          }}
+                          className="font-bold bg-primary text-white rounded-md py-1 px-2"
+                        >
+                          Ver contratos
+                        </button>{" "}
+                        <button
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_ver_aberturas")
+                                .showModal();
+                          }}
+                          className="font-bold bg-blue-500 text-white rounded-md py-1 px-2"
+                        >
+                          Ver aberturas
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex gap-3">
+                        {/* <FaEdit className="text-xl text-blue-500 cursor-pointer" /> */}
+                        <FaDeleteLeft
+                          onClick={() => {
+                            handleObtenerId(fabrica.id),
+                              document
+                                .getElementById("my_modal_eliminar")
+                                .showModal();
+                          }}
+                          className="text-xl text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* <div>
         <PDFViewer className="w-full h-[100vh]">
           <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
         </PDFViewer>
       </div> */}
 
-      <ModalCrearNuevaSalida />
-      <ModalEliminar idObtenida={idObtenida} />
-      <ModalVerImagenesRemitos idObtenida={idObtenida} />
-      <ModalVerAberturas idObtenida={idObtenida} />
-      <ModalVerContratos idObtenida={idObtenida} />
+          <ModalCrearNuevaSalida />
+          <ModalEliminar idObtenida={idObtenida} />
+          <ModalVerImagenesRemitos idObtenida={idObtenida} />
+          <ModalVerAberturas idObtenida={idObtenida} />
+          <ModalVerContratos idObtenida={idObtenida} />
+        </>
+      )}
     </section>
   );
 };
