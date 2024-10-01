@@ -11,16 +11,22 @@ export const Home = () => {
 
   // Obtener el primer día del mes actual
   const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 10);
-  const lastDayOfMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    10
-  );
+  let firstDayOfRange;
+  let lastDayOfRange;
+
+  if (today.getDate() < 10) {
+    // If the current day is before the 10th, the range is from the 10th of the previous month to the 10th of the current month.
+    firstDayOfRange = new Date(today.getFullYear(), today.getMonth() - 1, 10);
+    lastDayOfRange = new Date(today.getFullYear(), today.getMonth(), 10);
+  } else {
+    // If the current day is on or after the 10th, the range is from the 10th of the current month to the 10th of the next month.
+    firstDayOfRange = new Date(today.getFullYear(), today.getMonth(), 10);
+    lastDayOfRange = new Date(today.getFullYear(), today.getMonth() + 1, 10);
+  }
 
   // Convertir las fechas en formato YYYY-MM-DD para los inputs tipo date
-  const fechaInicioPorDefecto = firstDayOfMonth.toISOString().split("T")[0];
-  const fechaFinPorDefecto = lastDayOfMonth.toISOString().split("T")[0];
+  const fechaInicioPorDefecto = firstDayOfRange.toISOString().split("T")[0];
+  const fechaFinPorDefecto = lastDayOfRange.toISOString().split("T")[0];
 
   const [fechaInicio, setFechaInicio] = useState(fechaInicioPorDefecto);
   const [fechaFin, setFechaFin] = useState(fechaFinPorDefecto);
@@ -50,27 +56,19 @@ export const Home = () => {
 
   // Calcular el total del stock
   const totalStock = aberturas.reduce((total, abertura) => {
-    // Convertir stock a número si es una cadena
     const stockNumerico =
       typeof abertura.stock === "string"
         ? parseInt(abertura.stock, 10)
         : abertura.stock;
 
-    // Sumar al total
     return total + (isNaN(stockNumerico) ? 0 : stockNumerico);
   }, 0);
 
-  // Función para calcular el total de cantidades
   const calcularTotalCantidad = (salidas) => {
     return salidas.reduce((total, salida) => {
-      // Parsear el campo 'aberturas'
       const aberturas = JSON.parse(salida.aberturas);
-
-      // Calcular el total de cantidades en esta salida
       const totalCantidadSalida = aberturas.reduce((subtotal, abertura) => {
-        // Verificar que 'cantidad' es un array
         if (Array.isArray(abertura.cantidad)) {
-          // Reducir la cantidad en cada abertura
           const cantidadTotalAbertura = abertura.cantidad.reduce(
             (sum, cantidad) => {
               const cantidadNumerica = parseInt(cantidad, 10);
@@ -78,35 +76,26 @@ export const Home = () => {
             },
             0
           );
-
-          // Sumar al subtotal
           return subtotal + cantidadTotalAbertura;
         } else {
-          // Si 'cantidad' no es un array, tratar como un valor único
           const cantidadNumerica = parseInt(abertura.cantidad, 10);
           return subtotal + (isNaN(cantidadNumerica) ? 0 : cantidadNumerica);
         }
       }, 0);
 
-      // Sumar al total general
       return total + totalCantidadSalida;
     }, 0);
   };
 
-  // Calcular y mostrar el total
   const totalCantidad = calcularTotalCantidad(filteredDataSalidas);
 
-  // Función para calcular la cantidad de aberturas entregadas por fábrica
   const calcularCantidadPorFabrica = (salidas) => {
     return salidas.reduce((acc, salida) => {
       const aberturas = JSON.parse(salida.aberturas);
-
-      // Agrupar por fábrica
       if (!acc[salida.fabrica]) {
         acc[salida.fabrica] = 0;
       }
 
-      // Sumar las cantidades de aberturas para esta fábrica
       const totalCantidadSalida = aberturas.reduce((subtotal, abertura) => {
         const cantidadNumerica = parseInt(abertura.cantidad, 10);
         return subtotal + (isNaN(cantidadNumerica) ? 0 : cantidadNumerica);
@@ -163,7 +152,7 @@ export const Home = () => {
                   {totalStock}
                 </p>
               </div>
-            </div>{" "}
+            </div>
             <div className="border border-gray-300 rounded-md py-5 px-5">
               <div>
                 <p className="font-medium text-blue-500 text-lg">
@@ -224,14 +213,6 @@ export const Home = () => {
             </div>
           </div>
         </>
-      )}
-
-      {user.fabrica !== "aberturas" && (
-        <div className="h-screen flex justify-center items-center">
-          <p className="font-bold text-3xl">
-            Generar nuevos pedidos a la fabrica de aberturas.
-          </p>
-        </div>
       )}
     </section>
   );
