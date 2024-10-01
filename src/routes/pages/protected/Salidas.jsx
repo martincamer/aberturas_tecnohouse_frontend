@@ -25,18 +25,26 @@ export const Salidas = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFabrica, setSelectedFabrica] = useState("");
 
+  let filteredData;
+
   // Obtener el primer día del mes actual
   const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 10);
-  const lastDayOfMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    10
-  );
+  let firstDayOfRange;
+  let lastDayOfRange;
+
+  if (today.getDate() < 10) {
+    // If the current day is before the 10th, the range is from the 10th of the previous month to the 10th of the current month.
+    firstDayOfRange = new Date(today.getFullYear(), today.getMonth() - 1, 10);
+    lastDayOfRange = new Date(today.getFullYear(), today.getMonth(), 10);
+  } else {
+    // If the current day is on or after the 10th, the range is from the 10th of the current month to the 10th of the next month.
+    firstDayOfRange = new Date(today.getFullYear(), today.getMonth(), 10);
+    lastDayOfRange = new Date(today.getFullYear(), today.getMonth() + 1, 10);
+  }
 
   // Convertir las fechas en formato YYYY-MM-DD para los inputs tipo date
-  const fechaInicioPorDefecto = firstDayOfMonth.toISOString().split("T")[0];
-  const fechaFinPorDefecto = lastDayOfMonth.toISOString().split("T")[0];
+  const fechaInicioPorDefecto = firstDayOfRange.toISOString().split("T")[0];
+  const fechaFinPorDefecto = lastDayOfRange.toISOString().split("T")[0];
 
   const [fechaInicio, setFechaInicio] = useState(fechaInicioPorDefecto);
   const [fechaFin, setFechaFin] = useState(fechaFinPorDefecto);
@@ -49,7 +57,7 @@ export const Salidas = () => {
     setFechaFin(e.target.value);
   };
 
-  let filteredData = salidas.filter((item) => {
+  filteredData = salidas.filter((item) => {
     // Buscar en fabrica
     const searchTermLower = searchTerm.toLowerCase();
     const matchesSearchTerm = item.fabrica
