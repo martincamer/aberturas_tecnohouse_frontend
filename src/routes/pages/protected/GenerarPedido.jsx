@@ -218,6 +218,7 @@ export const ModalNuevoPedido = ({ setPedidos }) => {
                     <tr key={abertura.id}>
                       <td>{abertura.id}</td>
                       <td>{abertura.cliente}</td>
+                      <td>{abertura.tipo}</td>
                       <td>
                         <button
                           onClick={() => {
@@ -377,7 +378,7 @@ const ModalPedidoCompleto = ({ idObtenida }) => {
                     <th className="px-4 py-2">Medida</th>
                     <th className="px-4 py-2">Color</th>
                     <th className="px-4 py-2">Categoría</th>
-                    {/* <th className="px-4 py-2">Tipo</th> */}
+                    <th className="px-4 py-2">Tipo</th>
                     <th className="px-4 py-2">Cantidad</th>
                   </tr>
                 </thead>
@@ -388,7 +389,7 @@ const ModalPedidoCompleto = ({ idObtenida }) => {
                       <td className="border px-4 py-2">{abertura.medida}</td>
                       <td className="border px-4 py-2">{abertura.color}</td>
                       <td className="border px-4 py-2">{abertura.categoria}</td>
-                      {/* <td className="border px-4 py-2">{abertura.tipo}</td> */}
+                      <td className="border px-4 py-2">{abertura.tipo}</td>
                       <td className="border px-4 py-2 font-bold">
                         {abertura.cantidad}
                       </td>
@@ -1240,11 +1241,11 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
     );
   };
 
-   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Filtrar los pedidos por cliente
   const filteredAberturas = aberturasPedido
-    .filter(abertura => 
+    .filter((abertura) =>
       abertura.cliente.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => b.id - a.id);
@@ -1282,15 +1283,15 @@ export const ModalEditarPedido = ({ setPedidos, id }) => {
             </button>
           </div>
 
-          <div >
-        <input
-        type="text"
-        placeholder="Buscar por cliente"
-        className="mb-2 p-2 border border-gray-300 rounded-md bg-white outline-none"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-        </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Buscar por cliente"
+              className="mb-2 p-2 border border-gray-300 rounded-md bg-white outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
           <div className="px-0 max-md:overflow-x-auto max-md:h-[30vh] scrollbar-hidden w-full">
             <table className="table">

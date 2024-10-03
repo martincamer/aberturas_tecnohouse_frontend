@@ -354,6 +354,7 @@ const ModalPedidoCompleto = ({ idObtenida }) => {
                   <tr>
                     <th className="px-4 py-2">Detalle</th>
                     <th className="px-4 py-2">Medida</th>
+                    <th className="px-4 py-2">Tipo</th>
                     <th className="px-4 py-2">Color</th>
                     <th className="px-4 py-2">Categoría</th>
                     {/* <th className="px-4 py-2">Tipo</th> */}
@@ -365,6 +366,7 @@ const ModalPedidoCompleto = ({ idObtenida }) => {
                     <tr key={idx}>
                       <td className="border px-4 py-2">{abertura.detalle}</td>
                       <td className="border px-4 py-2">{abertura.medida}</td>
+                      <td className="border px-4 py-2">{abertura.tipo}</td>
                       <td className="border px-4 py-2">{abertura.color}</td>
                       <td className="border px-4 py-2">{abertura.categoria}</td>
                       {/* <td className="border px-4 py-2">{abertura.tipo}</td> */}
