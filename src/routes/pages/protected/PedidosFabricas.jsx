@@ -207,7 +207,7 @@ export const PedidosFabricas = () => {
                             (pedido.estado === "pendiente" &&
                               "bg-gradient-to-r from-orange-500 to-red-500  text-white") ||
                             (pedido.estado === "finalizado" &&
-                              "bg-gradient-to-r from-green to-blue-500  text-white") ||
+                              "bg-gradient-to-r from-green-500 to-blue-500  text-white") ||
                             (pedido.estado === "incompleto" &&
                               "bg-gradient-to-r from-red-500 to-red-300  text-white")
                           } py-2 px-4 rounded-md font-bold`}
