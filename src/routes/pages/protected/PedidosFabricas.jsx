@@ -86,8 +86,8 @@ export const PedidosFabricas = () => {
     <section className="w-full h-full min-h-screen max-h-full max-w-full">
       {user.fabrica === "aberturas" && (
         <>
-          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-            <p className="font-bold text-gray-900 text-xl">
+          <div className=" bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-extrabold text-2xl bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">
               Sector pedidos, generar nuevo.
             </p>
           </div>
@@ -194,7 +194,7 @@ export const PedidosFabricas = () => {
                               .showModal();
                         }}
                         type="button"
-                        className="bg-primary py-2 px-4 rounded-md text-white font-bold"
+                        className="bg-gradient-to-r from-pink-500 to-purple-500  py-2 px-4 rounded-md text-white font-bold"
                       >
                         Ver pedido
                       </button>
@@ -205,11 +205,11 @@ export const PedidosFabricas = () => {
                         <p
                           className={`${
                             (pedido.estado === "pendiente" &&
-                              "bg-orange-500 text-white") ||
+                              "bg-gradient-to-r from-orange-500 to-red-500  text-white") ||
                             (pedido.estado === "finalizado" &&
-                              "bg-green-500 text-white") ||
+                              "bg-gradient-to-r from-green to-blue-500  text-white") ||
                             (pedido.estado === "incompleto" &&
-                              "bg-red-500 text-white")
+                              "bg-gradient-to-r from-red-500 to-red-300  text-white")
                           } py-2 px-4 rounded-md font-bold`}
                         >
                           {pedido.estado}
@@ -226,7 +226,7 @@ export const PedidosFabricas = () => {
                                 .showModal();
                           }}
                           type="button"
-                          className="bg-blue-500 text-white font-bold text-center py-2 px-4 rounded-md"
+                          className="bg-gradient-to-r from-purple-500 to-blue-500  text-white font-bold text-center py-2 px-4 rounded-md"
                         >
                           Editar estado
                         </button>
