@@ -183,7 +183,7 @@ export const Home = () => {
               Aberturas Entregadas por Fábrica.
             </p>
             <div className="bg-white rounded-md border-none">
-              <table className="table bg-gray-200 rounded-t-xl">
+              <table className="table text-gray-800 text-sm border-none">
                 <thead className="text-sm font-bold text-gray-800">
                   <tr>
                     <th className="">Fábrica</th>

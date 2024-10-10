@@ -43,7 +43,10 @@ export const Login = () => {
           </div>
           <div className="text-base font-medium text-slate-500 text-center max-md:text-sm">
             Ingresa al sistema de Aberturas de{" "}
-            <span className="font-bold text-slate-600">Tecnohouse</span>.
+            <span className="font-bold bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">
+              Tecnohouse
+            </span>
+            .
           </div>
           {
             <div>
