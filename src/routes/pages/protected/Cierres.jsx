@@ -53,8 +53,8 @@ export const Cierres = () => {
     <section className="w-full h-full min-h-screen max-h-full">
       {user.fabrica === "aberturas" && (
         <>
-          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-            <p className="font-bold text-gray-900 text-xl">
+          <div className=" bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-extrabold text-2xl bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent ">
               Sector de cierres mensuales de salidas y stock.
             </p>
             <button
@@ -62,7 +62,7 @@ export const Cierres = () => {
                 document.getElementById("my_modal_crear_cierre").showModal()
               }
               type="button"
-              className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
+              className="bg-gradient-to-r from-pink-500 to-blue-400 py-1 px-4 rounded-md text-white font-semibold text-sm"
             >
               Cargar nuevo cierre del mes.
             </button>
@@ -114,7 +114,7 @@ export const Cierres = () => {
           </div>
 
           <div className="px-10 max-md:overflow-x-auto scrollbar-hidden pb-12 pt-0 max-md:px-3">
-            <table className="table">
+            <table className="table bg-gray-200 rounded-t-xl">
               <thead className="text-sm font-bold text-gray-800">
                 <tr>
                   <th>Referencia</th>
@@ -126,9 +126,12 @@ export const Cierres = () => {
                 </tr>
               </thead>
 
-              <tbody className="text-xs font-medium capitalize ">
+              <tbody className="text-xs font-medium capitalize bg-white ">
                 {cierres.filter(filtrarCierres).map((cierre) => (
-                  <tr key={cierre.id}>
+                  <tr
+                    className="hover:bg-gray-100/40 transition-all cursor-pointer"
+                    key={cierre.id}
+                  >
                     <td>{cierre.id}</td>
                     <td>{cierre.numero_salidas}</td>
                     <td>{cierre.numero_stock}</td>
@@ -389,7 +392,7 @@ export const ModalCrearCierre = () => {
           <div>
             <button
               type="submit"
-              className="py-1.5 px-6 bg-primary hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
+              className="bg-gradient-to-r from-pink-500 to-blue-400 py-1 px-4 rounded-md text-white font-semibold text-sm"
             >
               Cargar el numero del cierre
             </button>

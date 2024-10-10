@@ -112,11 +112,10 @@ export const Home = () => {
     <section className="w-full h-full min-h-screen max-h-full max-w-full">
       {user.fabrica === "aberturas" && (
         <>
-          <div className=" bg-gray-100 py-10 px-6 max-md:py-10 max-md:px-4 flex justify-between items-center">
-            <p className="font-bold text-gray-800 text-xl max-md:text-base">
-              Estadísticas de las aberturas, salidas y stock.
+          <div className=" bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-extrabold text-2xl bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent ">
+              Panel de estadísticas aberturas.
             </p>
-            <p className="font-bold max-md:hidden">Fecha actual {}</p>
           </div>
           <div className="flex pt-10 px-10 max-md:px-5">
             <div className="flex gap-3">
@@ -141,50 +140,50 @@ export const Home = () => {
             </div>
           </div>
           <div className="grid grid-cols-5 px-10 py-5 gap-3 max-md:px-5 max-md:grid-cols-1">
-            <div className="border border-gray-300 rounded-md py-5 px-5">
+            <div className="bg-gray-800 py-5 px-5 rounded-2xl">
               <div>
-                <p className="font-medium text-blue-500 text-lg">
+                <p className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent text-lg font-bold">
                   Total de aberturas en fábrica.
                 </p>
               </div>
               <div>
-                <p className="font-extrabold text-gray-800 text-lg">
+                <p className="bg-gradient-to-r from-green-300 to-blue-400 bg-clip-text text-transparent text-2xl font-bold">
                   {totalStock}
                 </p>
               </div>
             </div>
-            <div className="border border-gray-300 rounded-md py-5 px-5">
+            <div className="bg-gray-800 py-5 px-5 rounded-2xl">
               <div>
-                <p className="font-medium text-blue-500 text-lg">
+                <p className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent text-lg font-bold">
                   Total de salidas - entregas.
                 </p>
               </div>
               <div>
-                <p className="font-extrabold text-gray-800 text-lg">
+                <p className="bg-gradient-to-r from-green-300 to-blue-400 bg-clip-text text-transparent text-2xl font-bold">
                   {totalCantidad}
                 </p>
               </div>
             </div>
-            <div className="bg-gray-800 rounded-md py-5 px-5">
+            <div className="bg-white border border-gray-300 rounded-2xl py-5 px-5">
               <div>
-                <p className="font-medium text-gray-200 text-lg">
-                  Total stock + salidas/entregas.
+                <p className="bg-gradient-to-r from-blue-500 to-primary bg-clip-text text-transparent text-lg font-bold">
+                  Resumen total de entregas + stock.
                 </p>
               </div>
               <div>
-                <p className="font-extrabold text-white text-lg">
+                <p className="bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent text-2xl font-bold">
                   {totalCantidad + totalStock}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800 py-5 px-5 mx-10 my-5 rounded-md max-md:mx-5">
-            <p className="font-bold text-gray-200 text-xl mb-4">
-              Aberturas Entregadas por Fábrica
+          <div className="bg-gray-800 py-5 px-5 mx-10 my-5 rounded-2xl max-md:mx-5 max-md:max-w-full">
+            <p className="bg-gradient-to-r from-green-300 to-primary bg-clip-text text-transparent text-2xl mb-4 font-bold">
+              Aberturas Entregadas por Fábrica.
             </p>
-            <div className="bg-white rounded-md">
-              <table className="table text-gray-800 text-sm">
+            <div className="bg-white rounded-md border-none">
+              <table className="table bg-gray-200 rounded-t-xl">
                 <thead className="text-sm font-bold text-gray-800">
                   <tr>
                     <th className="">Fábrica</th>
@@ -198,10 +197,10 @@ export const Home = () => {
                         <td className="border-none font-bold">
                           Fabrica - {fabrica}
                         </td>
-                        <td className="">
+                        <td className=" border-none ">
                           <div className="flex">
-                            <p className="font-extrabold bg-green-100/90 py-2 px-3 rounded-md text-green-700">
-                              {cantidad}
+                            <p className="font-extrabold bg-gradient-to-r from-green-500 to-blue-400 text-white px-3 py-1 rounded-md">
+                              {cantidad} aberturas.
                             </p>
                           </div>
                         </td>

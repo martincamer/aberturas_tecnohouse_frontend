@@ -188,8 +188,8 @@ export const Salidas = () => {
     <section className="w-full h-full min-h-screen max-h-full">
       {user.fabrica === "aberturas" && (
         <>
-          <div className="bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
-            <p className="font-bold text-gray-900 text-xl">
+          <div className=" bg-gray-100 py-10 px-10 flex justify-between items-center max-md:flex-col max-md:gap-3">
+            <p className="font-extrabold text-2xl bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent ">
               Sector de salidas.
             </p>
             <button
@@ -197,13 +197,39 @@ export const Salidas = () => {
                 document.getElementById("my_modal_nueva_salida").showModal()
               }
               type="button"
-              className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
+              className="bg-gradient-to-r from-pink-500 to-blue-400 py-1 px-4 rounded-md text-white font-semibold text-sm"
             >
               Cargar nueva salida de aberturas
             </button>
           </div>
 
-          <div className="dropdown dropdown-hover px-10 py-10 max-md:px-5">
+          <div className="grid grid-cols-4 px-10 py-5 gap-3 max-md:px-5 max-md:grid-cols-1">
+            <div className="bg-gray-800 py-5 px-5 rounded-2xl flex flex-col gap-2 justify-center items-center">
+              <div>
+                <p className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent text-xl font-extrabold">
+                  Total aberturas entregadas.
+                </p>
+              </div>
+              <div>
+                <p className="bg-gradient-to-r from-green-200 to-blue-400 bg-clip-text text-transparent text-3xl font-bold">
+                  {totalCantidad}
+                </p>
+              </div>
+            </div>
+            <div className="bg-gray-800 py-5 px-5 rounded-2xl flex flex-col gap-2 justify-center items-center">
+              <div>
+                <p className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent text-xl font-extrabold">
+                  Contratos de salidas.
+                </p>
+              </div>
+              <div>
+                <p className="bg-gradient-to-r from-green-200 to-blue-400 bg-clip-text text-transparent text-3xl font-bold">
+                  {totalContratos}
+                </p>
+              </div>
+            </div>
+          </div>
+          {/* <div className="dropdown dropdown-hover px-10 py-10 max-md:px-5">
             <div
               tabIndex={0}
               role="button"
@@ -236,7 +262,7 @@ export const Salidas = () => {
                 </div>
               </div>
             </ul>
-          </div>
+          </div> */}
           <div className="px-10 font-bold mb-1 max-md:px-5">
             <p>Filtrar por fecha</p>
           </div>
@@ -301,7 +327,7 @@ export const Salidas = () => {
             </div>
             <div className="mt-3">
               <PDFDownloadLink
-                className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
+                className="bg-gradient-to-r from-purple-500 to-blue-500 py-1.5 px-4 rounded-md text-white font-bold text-sm"
                 fileName={`Resumen filtrado desde ${fechaInicio} - ${fechaFin}`}
                 document={
                   <ImprimirTodosLasSalidas todasLasSalidas={filteredData} />
@@ -313,27 +339,30 @@ export const Salidas = () => {
           </div>
 
           <div className="px-10 max-md:overflow-x-auto scrollbar-hidden pb-12 pt-5 max-md:px-3">
-            <table className="table">
+            <table className="table bg-gray-200 rounded-t-xl">
               <thead className="text-sm font-bold text-gray-800">
                 <tr>
                   <th>Referencia</th>
                   <th>Fabrica de la salida</th>
                   <th>Total aberturas</th>
-                  {/* <th>Remitos cargados</th> */}
                   <th>Fecha de salida</th>
                   <th>Fecha de carga al sistema</th>
+                  <th>Datos</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
 
-              <tbody className="text-xs font-medium capitalize ">
+              <tbody className="text-xs font-medium capitalize bg-white ">
                 {filteredData.map((fabrica) => (
-                  <tr key={fabrica.id}>
+                  <tr
+                    className="hover:bg-gray-100/40 transition-all cursor-pointer"
+                    key={fabrica.id}
+                  >
                     <td>{fabrica.id}</td>
                     <td>{fabrica.fabrica}</td>
                     <td>
                       <div className="flex">
-                        <p className="font-bold text-white bg-blue-500 py-1 px-3 rounded-md">
+                        <p className="font-bold text-white bg-gradient-to-r from-purple-500 to-blue-500 py-1 px-3 rounded-md">
                           {calcularMontoTotal(fabrica.aberturas)}
                         </p>
                       </div>
@@ -391,7 +420,7 @@ export const Salidas = () => {
                                 .getElementById("my_modal_ver_imagenes_remitos")
                                 .showModal();
                           }}
-                          className="font-bold bg-primary text-white rounded-md py-1 px-2"
+                          className="font-bold  bg-gradient-to-r from-yellow-500 to-green-500 text-white rounded-md py-1 px-2"
                         >
                           Ver remitos
                         </button>{" "}
@@ -402,7 +431,7 @@ export const Salidas = () => {
                                 .getElementById("my_modal_ver_contratos")
                                 .showModal();
                           }}
-                          className="font-bold bg-primary text-white rounded-md py-1 px-2"
+                          className="font-bold  bg-gradient-to-r from-yellow-500 to-green-500 text-white rounded-md py-1 px-2"
                         >
                           Ver contratos
                         </button>{" "}
@@ -413,7 +442,7 @@ export const Salidas = () => {
                                 .getElementById("my_modal_ver_aberturas")
                                 .showModal();
                           }}
-                          className="font-bold bg-blue-500 text-white rounded-md py-1 px-2"
+                          className="font-bold  bg-gradient-to-r from-blue-500 to-gray-500 text-white rounded-md py-1 px-2"
                         >
                           Ver aberturas
                         </button>
@@ -809,7 +838,7 @@ export const ModalCrearNuevaSalida = () => {
                 document.getElementById("my_modal_cargar_remitos").showModal()
               }
               type="button"
-              className="text-sm font-bold bg-blue-500 py-2 px-2 rounded-md text-white"
+              className="text-sm font-bold bg-gradient-to-r from-primary to-purple-500 py-2 px-2 rounded-md text-white"
             >
               Cargar numeros de remitos
             </button>
@@ -867,7 +896,7 @@ export const ModalCrearNuevaSalida = () => {
                 document.getElementById("my_modal_contratos").showModal()
               }
               type="button"
-              className="text-sm font-bold bg-blue-500 py-2 px-2 rounded-md text-white"
+              className="text-sm font-bold bg-gradient-to-r from-primary to-purple-500 py-2 px-2 rounded-md text-white"
             >
               Cargar contratos
             </button>
@@ -927,7 +956,7 @@ export const ModalCrearNuevaSalida = () => {
                   .showModal()
               }
               type="button"
-              className="text-sm font-bold bg-blue-500 py-2 px-2 rounded-md text-white"
+              className="text-sm font-bold bg-gradient-to-r from-green-500 to-blue-500 py-2 px-2 rounded-md text-white"
             >
               Cargar abertura a la salida
             </button>
@@ -938,7 +967,7 @@ export const ModalCrearNuevaSalida = () => {
                   .showModal()
               }
               type="button"
-              className="text-sm font-bold bg-primary py-2 px-2 rounded-md text-white"
+              className="text-sm font-bold bg-gradient-to-r from-sky-500 to-purple-500 py-2 px-2 rounded-md text-white"
             >
               Cargar nueva abertura al sistema
             </button>
@@ -1045,7 +1074,7 @@ export const ModalCrearNuevaSalida = () => {
           <div className="mt-2">
             <button
               type="submit"
-              className="py-1.5 px-6 bg-primary hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
+              className="py-1.5 px-6 bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
             >
               Cargar la salida
             </button>
@@ -1116,7 +1145,7 @@ export const ModalCargarAberturasAlSistema = ({}) => {
               document.getElementById("my_modal_nueva_abertura").showModal()
             }
             type="button"
-            className="bg-primary py-1 px-4 rounded-md text-white font-semibold text-sm"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 py-1 px-4 rounded-md text-white font-semibold text-sm"
           >
             Cargar nueva abertura
           </button>
@@ -1515,7 +1544,7 @@ export const ModalSeleccionarAberturas = ({ handleSeleccionarAbertura }) => {
                           }
                         }}
                         type="button"
-                        className="bg-primary py-1 px-2 rounded-md text-white font-bold"
+                        className="bg-gradient-to-r from-violet-500 to-blue-500 py-1 px-2 rounded-md text-white font-bold"
                       >
                         Seleccionar
                       </button>
@@ -1717,7 +1746,7 @@ export const ModalCantidad = ({ idObtenida, handleSeleccionarAbertura }) => {
                     .close();
               }}
               type="button"
-              className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 py-1 px-2 rounded-md text-white font-bold text-sm"
             >
               Seleccionar cantidad
             </button>
@@ -1856,7 +1885,7 @@ export const ModalNuevaFabrica = () => {
           <div className="mt-2">
             <button
               type="submit"
-              className="py-1.5 px-6 bg-primary hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
+              className="py-1.5 px-6 bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-md text-white transition-all rounded-md font-semibold text-sm"
             >
               Cargar la fabrica
             </button>
@@ -2042,7 +2071,7 @@ export const ModalRemitosCargar = ({ handleSeleccionarRemito }) => {
                   document.getElementById("my_modal_cargar_remitos").close();
               }}
               type="button"
-              className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 py-1 px-2 rounded-md text-white font-bold text-sm"
             >
               Cargar remito
             </button>
@@ -2088,7 +2117,7 @@ export const ModalContratos = ({ handleAgregarContratos }) => {
                   document.getElementById("my_modal_contratos").close();
               }}
               type="button"
-              className="bg-primary py-1 px-2 rounded-md text-white font-bold text-sm"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 py-1 px-2 rounded-md text-white font-bold text-sm"
             >
               Cargar contrato/cliente.
             </button>
